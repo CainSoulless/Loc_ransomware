@@ -152,6 +152,7 @@
     <ClCompile Include="src\Crypt.cpp" />
     <ClCompile Include="src\Evasion.cpp" />
     <ClCompile Include="src\Executable.cpp" />
+    <None Include="src\tes.cpp" />
     <ClCompile Include="src\Injection.cpp" />
     <ClCompile Include="src\Persistence.cpp" />
     <ClCompile Include="src\Privilege_escalation.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="include\Privilege_escalation.h" />
     <ClInclude Include="include\Recon.h" />
     <ClInclude Include="include\Utils.h" />
+    <ClInclude Include="include\Injection.h" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="asm\lastError.asm" />

