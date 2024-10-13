@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\evasion\Evasion.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Executable.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Injection.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Loc.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Persistence.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Privilege_escalation.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Recon.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crypt.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HandleGuard.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\evasion\ProcessHollowing.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\ASM.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\evasion\Evasion.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Executable.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Injection.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Persistence.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Privilege_escalation.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Recon.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utils.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Crypt.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\HandleGuard.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\evasion\ProcessHollowing.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="asm\lastError.asm">
+      <Filter>Includes</Filter>
+    </MASM>
+    <MASM Include="asm\PEB.asm">
+      <Filter>Includes</Filter>
+    </MASM>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Includes">
+      <UniqueIdentifier>{bf99a652-8001-4260-851e-27b7f4f02356}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{26586f8a-e0a8-4bce-9b6a-1af94c7ef581}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\tes.cpp">
+      <Filter>Sources</Filter>
+    </None>
+  </ItemGroup>
+</Project>
