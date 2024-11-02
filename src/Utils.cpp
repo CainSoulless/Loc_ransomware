@@ -1,6 +1,14 @@
 #pragma once
 
+
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#define _WINSOCKAPI_
+
 #include "Utils.h"
+#include <winsock2.h>
+#include <ws2tcpip.h>
+
 
 Utils::Utils() {};
 
@@ -12,7 +20,7 @@ void Utils::changeWallpaper()
     SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, (void*)wallpaper, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
 }
 
-BOOL Utils::hostConnection(const std::string& hostname, int puerto) {
+BOOL Utils::HostConnection(const std::string& hostname, int port) {
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
     struct addrinfo* result = NULL, * ptr = NULL, hints;
@@ -35,7 +43,7 @@ BOOL Utils::hostConnection(const std::string& hostname, int puerto) {
     hints.ai_protocol = IPPROTO_TCP;
 
     // Resolver la dirección del servidor
-    iResult = getaddrinfo(hostname.c_str(), std::to_string(puerto).c_str(), &hints, &result);
+    iResult = getaddrinfo(hostname.c_str(), std::to_string(port).c_str(), &hints, &result);
     if (iResult != 0) {
         std::cerr << "getaddrinfo falló con el error: " << iResult << std::endl;
         WSACleanup();
@@ -118,5 +126,9 @@ std::string Utils::generateRandomString(void) {
 	}
 
 	return result;
+}
+
+std::wstring Utils::StringToWstring(const std::string& str) {
+    return std::wstring(str.begin(), str.end());
 }
 

@@ -152,12 +152,14 @@
     <ClCompile Include="src\Crypt.cpp" />
     <ClCompile Include="src\evasion\Evasion.cpp" />
     <ClCompile Include="src\evasion\ProcessHollowing.cpp" />
+    <ClCompile Include="src\evasion\Sandbox.cpp" />
     <ClCompile Include="src\Executable.cpp" />
     <None Include="src\tes.cpp" />
     <ClCompile Include="src\HandleGuard.cpp" />
     <ClCompile Include="src\Injection.cpp" />
     <ClCompile Include="src\Persistence.cpp" />
-    <ClCompile Include="src\Privilege_escalation.cpp" />
+    <ClCompile Include="src\privilegeEscalation\PrivilegeEscalation.cpp" />
+    <ClCompile Include="src\privilegeEscalation\TokenTheft.cpp" />
     <ClCompile Include="src\Recon.cpp" />
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
@@ -166,13 +168,15 @@
     <ClInclude Include="include\Crypt.h" />
     <ClInclude Include="include\evasion\Evasion.h" />
     <ClInclude Include="include\evasion\ProcessHollowing.h" />
+    <ClInclude Include="include\evasion\Sandbox.h" />
     <ClInclude Include="include\Executable.h" />
     <ClInclude Include="include\HandleGuard.h" />
     <ClInclude Include="include\Persistence.h" />
-    <ClInclude Include="include\Privilege_escalation.h" />
+    <ClInclude Include="include\PrivilegeEscalation.h" />
+    <ClInclude Include="include\privilegeEscalation\TokenTheft.h" />
     <ClInclude Include="include\Recon.h" />
-    <ClInclude Include="include\Utils.h" />
     <ClInclude Include="include\Injection.h" />
+    <ClInclude Include="include\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="asm\lastError.asm" />

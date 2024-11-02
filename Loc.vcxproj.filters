@@ -16,9 +16,6 @@
     <ClCompile Include="src\Persistence.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\Privilege_escalation.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\Recon.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -32,6 +29,15 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="src\evasion\ProcessHollowing.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\evasion\Sandbox.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\privilegeEscalation\TokenTheft.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\privilegeEscalation\PrivilegeEscalation.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -51,13 +57,10 @@
     <ClInclude Include="include\Persistence.h">
       <Filter>Includes</Filter>
     </ClInclude>
-    <ClInclude Include="include\Privilege_escalation.h">
+    <ClInclude Include="include\PrivilegeEscalation.h">
       <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="include\Recon.h">
-      <Filter>Includes</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Utils.h">
       <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="include\Crypt.h">
@@ -67,6 +70,15 @@
       <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="include\evasion\ProcessHollowing.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\evasion\Sandbox.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utils.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\privilegeEscalation\TokenTheft.h">
       <Filter>Includes</Filter>
     </ClInclude>
   </ItemGroup>

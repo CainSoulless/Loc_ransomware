@@ -14,7 +14,7 @@ class Executable {
 public:
     Executable();
     BOOL    beingDebugged();
-    LPCWSTR getCurrentPath();
+    static LPCWSTR getCurrentPath();
     PTEB    getTEB();
     PPEB    getPEB();
     

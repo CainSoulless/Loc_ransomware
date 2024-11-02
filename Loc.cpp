@@ -32,8 +32,8 @@ int main(void) {
     }
     */
 
-    Persistence persistence;
-    persistence.registryKeyCreation();  
+    // Persistence persistence;
+    //Persistence::RegistryKeyCreation();  
     
     /*
     Utils utils;

