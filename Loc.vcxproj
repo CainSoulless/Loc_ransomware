@@ -161,6 +161,7 @@
     <ClCompile Include="src\privilegeEscalation\PrivilegeEscalation.cpp" />
     <ClCompile Include="src\privilegeEscalation\TokenTheft.cpp" />
     <ClCompile Include="src\Recon.cpp" />
+    <ClCompile Include="src\system_utils\WinAPIWrapper.cpp" />
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +177,7 @@
     <ClInclude Include="include\privilegeEscalation\TokenTheft.h" />
     <ClInclude Include="include\Recon.h" />
     <ClInclude Include="include\Injection.h" />
+    <ClInclude Include="include\system_utils\WinAPIWrapper.h" />
     <ClInclude Include="include\Utils.h" />
   </ItemGroup>
   <ItemGroup>

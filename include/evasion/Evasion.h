@@ -16,7 +16,7 @@ typedef BOOL(WINAPI* VirtualProtect_t)(
 class Evasion {
 public:
 	// Attributes
-	BOOL mustBeAvoided;
+	BOOL mustBeAvoided = FALSE;
 
 	// Methods 
 	Evasion();

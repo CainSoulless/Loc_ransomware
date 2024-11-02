@@ -40,6 +40,9 @@
     <ClCompile Include="src\privilegeEscalation\PrivilegeEscalation.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\system_utils\WinAPIWrapper.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ASM.h">
@@ -79,6 +82,9 @@
       <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="include\privilegeEscalation\TokenTheft.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\system_utils\WinAPIWrapper.h">
       <Filter>Includes</Filter>
     </ClInclude>
   </ItemGroup>
