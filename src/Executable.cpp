@@ -29,4 +29,3 @@ LPCWSTR Executable::getCurrentPath() {
         return L"";
     }
 }
-

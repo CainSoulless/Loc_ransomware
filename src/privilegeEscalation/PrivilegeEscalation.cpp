@@ -1,4 +1,4 @@
-#include "privilegeEscalation\PrivilegeEscalation.h"
+#include "privilege_escalation\PrivilegeEscalation.h"
 #include "HandleGuard.h"
 #include "Recon.h"
 #include <iostream>
@@ -123,4 +123,3 @@ BOOL PrivilegeEscalation::enableDebugPrivilege() {
 	CloseHandle(hToken);
 	return FALSE;
 }
-

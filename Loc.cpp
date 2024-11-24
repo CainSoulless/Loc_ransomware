@@ -1,12 +1,6 @@
 // Loc.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include "Utils.h"
-#include "Crypt.h"
-#include <iostream>
-#include "Persistence.h"
-#include "evasion\Evasion.h"
-
 #define TEST_MODE 1
 
 #if TEST_MODE == 1

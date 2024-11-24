@@ -79,10 +79,14 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>C:\Users\rodri\source\repos\Loc\Loc\src;C:\Users\rodri\source\repos\Loc\Loc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>MaxSpeed</Optimization>
+      <StringPooling>false</StringPooling>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <DataExecutionPrevention>false</DataExecutionPrevention>
     </Link>
     <MASM>
       <IncludePaths>$(MSBuildProjectDirectory)\asm;%(IncludePaths)</IncludePaths>
@@ -98,12 +102,14 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>C:\Users\rodri\source\repos\Loc\Loc\src;C:\Users\rodri\source\repos\Loc\Loc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <StringPooling>false</StringPooling>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <DataExecutionPrevention>false</DataExecutionPrevention>
     </Link>
     <MASM>
       <IncludePaths>$(MSBuildProjectDirectory)\asm;%(IncludePaths)</IncludePaths>
@@ -117,10 +123,14 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>C:\Users\rodri\source\repos\Loc\Loc\src;C:\Users\rodri\source\repos\Loc\Loc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>MaxSpeed</Optimization>
+      <StringPooling>false</StringPooling>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <DataExecutionPrevention>false</DataExecutionPrevention>
     </Link>
     <MASM>
       <IncludePaths>$(MSBuildProjectDirectory)\asm;%(IncludePaths)</IncludePaths>
@@ -136,12 +146,14 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>C:\Users\rodri\source\repos\Loc\Loc\src;C:\Users\rodri\source\repos\Loc\Loc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <StringPooling>false</StringPooling>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <DataExecutionPrevention>false</DataExecutionPrevention>
     </Link>
     <MASM>
       <IncludePaths>$(MSBuildProjectDirectory)\asm;%(IncludePaths)</IncludePaths>
@@ -149,18 +161,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Loc.cpp" />
-    <ClCompile Include="src\Crypt.cpp" />
     <ClCompile Include="src\evasion\Evasion.cpp" />
     <ClCompile Include="src\evasion\ProcessHollowing.cpp" />
     <ClCompile Include="src\evasion\Sandbox.cpp" />
     <ClCompile Include="src\Executable.cpp" />
-    <None Include="src\tes.cpp" />
     <ClCompile Include="src\HandleGuard.cpp" />
-    <ClCompile Include="src\Injection.cpp" />
+    <ClCompile Include="src\Obfuscator.cpp" />
     <ClCompile Include="src\Persistence.cpp" />
     <ClCompile Include="src\privilegeEscalation\PrivilegeEscalation.cpp" />
     <ClCompile Include="src\privilegeEscalation\TokenTheft.cpp" />
     <ClCompile Include="src\Recon.cpp" />
+    <ClCompile Include="src\ShellcodeManager.cpp" />
     <ClCompile Include="src\system_utils\WinAPIWrapper.cpp" />
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
@@ -172,11 +183,12 @@
     <ClInclude Include="include\evasion\Sandbox.h" />
     <ClInclude Include="include\Executable.h" />
     <ClInclude Include="include\HandleGuard.h" />
+    <ClInclude Include="include\Obfuscator.h" />
     <ClInclude Include="include\Persistence.h" />
-    <ClInclude Include="include\PrivilegeEscalation.h" />
+    <ClInclude Include="include\privilege_escalation\PrivilegeEscalation.h" />
     <ClInclude Include="include\privilegeEscalation\TokenTheft.h" />
     <ClInclude Include="include\Recon.h" />
-    <ClInclude Include="include\Injection.h" />
+    <ClInclude Include="include\ShellcodeManager.h" />
     <ClInclude Include="include\system_utils\WinAPIWrapper.h" />
     <ClInclude Include="include\Utils.h" />
   </ItemGroup>

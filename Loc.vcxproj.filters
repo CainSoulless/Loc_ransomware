@@ -7,9 +7,6 @@
     <ClCompile Include="src\Executable.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\Injection.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Loc.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -20,9 +17,6 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="src\Utils.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Crypt.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="src\HandleGuard.cpp">
@@ -43,6 +37,12 @@
     <ClCompile Include="src\system_utils\WinAPIWrapper.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\ShellcodeManager.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Obfuscator.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ASM.h">
@@ -54,13 +54,10 @@
     <ClInclude Include="include\Executable.h">
       <Filter>Includes</Filter>
     </ClInclude>
-    <ClInclude Include="include\Injection.h">
-      <Filter>Includes</Filter>
-    </ClInclude>
     <ClInclude Include="include\Persistence.h">
       <Filter>Includes</Filter>
     </ClInclude>
-    <ClInclude Include="include\PrivilegeEscalation.h">
+    <ClInclude Include="include\privilege_escalation\PrivilegeEscalation.h">
       <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="include\Recon.h">
@@ -87,6 +84,12 @@
     <ClInclude Include="include\system_utils\WinAPIWrapper.h">
       <Filter>Includes</Filter>
     </ClInclude>
+    <ClInclude Include="include\ShellcodeManager.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Obfuscator.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="asm\lastError.asm">
@@ -103,10 +106,5 @@
     <Filter Include="Sources">
       <UniqueIdentifier>{26586f8a-e0a8-4bce-9b6a-1af94c7ef581}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\tes.cpp">
-      <Filter>Sources</Filter>
-    </None>
   </ItemGroup>
 </Project>

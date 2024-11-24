@@ -1,4 +1,4 @@
-#include "privilegeEscalation\TokenTheft.h"
+#include "privilege_escalation\TokenTheft.h"
 #include "Utils.h"
 
 TokenTheft::TokenTheft() : hProcessSnapshot(INVALID_HANDLE_VALUE) {

