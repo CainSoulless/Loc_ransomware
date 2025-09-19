@@ -43,6 +43,24 @@
     <ClCompile Include="src\Obfuscator.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\Crypt.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crypt\FileEncryptor.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptManager.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Logger.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="test.h">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\injection\dll\RemoteThreadDllInjector.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ASM.h">
@@ -88,6 +106,24 @@
       <Filter>Includes</Filter>
     </ClInclude>
     <ClInclude Include="include\Obfuscator.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Crypt\FileEncryptor.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\crypt\CryptManager.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\evasion\DllInjection.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="IDllInjector.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\injection\dll\RemoteThreadDllInjector.h">
       <Filter>Includes</Filter>
     </ClInclude>
   </ItemGroup>

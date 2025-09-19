@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Loc\\x64\\Debug\\test2.h.obj",
+            "outputs": [
+                "C:\\Users\\cain\\source\\repos\\Loc\\Loc\\x64\\Debug\\vc143.pdb",
+                "Loc\\x64\\Debug\\",
+                "C:\\Users\\cain\\source\\repos\\Loc\\Loc\\x64\\Debug\\test2.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "UnitTest\\test2.h",
+                    "source-path": "c:\\users\\cain\\source\\repos\\loc\\unittest\\test2.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

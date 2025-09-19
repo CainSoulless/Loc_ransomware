@@ -4,17 +4,11 @@
 #define TEST_MODE 1
 
 #if TEST_MODE == 1
-#include "tests/test.cpp"
+#include "test.h"
 #endif
 
 int main(void) {
     #if TEST_MODE == 1 
-    /*
-        Evasion evasion;
-        if (evasion.mustBeAvoided) {
-            return 0xdeadbeef;
-        }
-    */
         start_testing();
         exit(0);
     #endif
@@ -36,7 +30,7 @@ int main(void) {
 
     /*
     Crypt crypt;
-    crypt.startCrypt();
+    crypt.StartCrypt();
 
     */
     return EXIT_SUCCESS;

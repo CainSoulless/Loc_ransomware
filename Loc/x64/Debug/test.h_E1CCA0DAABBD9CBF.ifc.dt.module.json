@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Loc\\x64\\Debug\\test.obj",
+            "outputs": [
+                "Loc\\x64\\Debug\\test.h_E1CCA0DAABBD9CBF.ifc.dt.module.json",
+                "Loc\\x64\\Debug\\test.h_E1CCA0DAABBD9CBF.ifc.dt.d.json",
+                "Loc\\x64\\Debug\\test.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "C:\\Users\\cain\\source\\repos\\Loc\\UnitTest\\test.h",
+                    "source-path": "c:\\users\\cain\\source\\repos\\loc\\unittest\\test.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

@@ -2,7 +2,7 @@
 
 Crypt::Crypt() {}
 
-VOID Crypt::startCrypt() {
+VOID Crypt::StartCrypt() {
 	this->_traverse_directory(this->startingPath);
 }
 

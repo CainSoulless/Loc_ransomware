@@ -20,6 +20,7 @@ public:
     BOOL SetThreadContext(HANDLE hThread, const CONTEXT* lpContext);
     DWORD ResumeThread(HANDLE hThread);
     HANDLE CreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE  lpStartAddress, __drv_aliasesMem LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
+    HMODULE LoadLibraryA(LPCSTR lpLibFileName);
 
 
 private:
@@ -35,6 +36,7 @@ private:
     using pSetThreadContext         = BOOL(WINAPI*)(HANDLE, const CONTEXT*);
     using pResumeThread             = DWORD(WINAPI*)(HANDLE);
     using pCreateThread             = HANDLE(WINAPI*)(LPSECURITY_ATTRIBUTES, SIZE_T, LPTHREAD_START_ROUTINE, LPVOID, DWORD, LPDWORD);
+    using pLoadLibraryA             = HMODULE(WINAPI*)(LPCSTR);
 
 
     pCreateProcessA CreateProcessA_             = nullptr;
@@ -46,7 +48,7 @@ private:
     pSetThreadContext SetThreadContext_         = nullptr;
     pResumeThread ResumeThread_                 = nullptr;
     pCreateThread CreateThread_                 = nullptr;
+    pLoadLibraryA LoadLibraryA_                 = nullptr; 
 
     void _LoadFunctions();
-    
 };
