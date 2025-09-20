@@ -45,7 +45,7 @@ Este repositorio fue creado con fines de **researching** en seguridad ofensiva, 
 ## 🧩 Posibles técnicas futuras
 
 - **Timing-based sandbox detection**
-- **Cash-as-Demand**
+- **Cash-on-Demand**
 - **Comunicación a C2**
 - **API unhooking desde ntdll.dll limpia** (Mi técnica favorita️❤️)
 
