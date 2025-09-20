@@ -3,8 +3,9 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "system_utils\WinAPIWrapper.h"
+#include "system_utils/WinAPIWrapper.h"
 #include "injection/dll/RemoteThreadDllInjector.h"
+#include "injection/shellcode/ShellcodeInjector.h"
 #include "Logger.h"
 
 /*
@@ -43,7 +44,7 @@ private:
 	LPVOID _AllocateRemoteMemory(HANDLE hProcess, SIZE_T size);
 	void _WriteRemoteMemory(HANDLE hProcess, LPVOID remoteAddress, const void* buffer, SIZE_T size);
 	void _ResumeProcess(PROCESS_INFORMATION& pi);
-	LPVOID _GetLoadLibraryAddress();
+	//LPVOID _GetLoadLibraryAddress();
 
 	WinAPIWrapper api;
 };

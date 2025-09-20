@@ -1,15 +1,9 @@
 #pragma once
-#include <filesystem>
-#include <system_error>
+#include "injection/IInjector.h"
 
-class ProcessCreationInfo;
-
-class IDllInjector {
+class IDllInjector : public IInjector {
 public:
-	virtual ~IDllInjector() = default;
+    virtual ~IDllInjector() = default;
 
-	virtual bool injectInto(
-		ProcessCreationInfo& pci,
-		const std::filesystem::path& dllPath,
-		std::error_code& ec) noexcept = 0;
+    virtual bool InjectInto(PROCESS_INFORMATION& pi, const std::filesystem::path& dllPath) noexcept = 0;
 };

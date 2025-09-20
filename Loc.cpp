@@ -4,7 +4,7 @@
 #define TEST_MODE 1
 
 #if TEST_MODE == 1
-#include "test.h"
+#include "tests/test.h"
 #endif
 
 int main(void) {
