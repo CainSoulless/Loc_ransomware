@@ -20,7 +20,8 @@ public:
     BOOL SetThreadContext(HANDLE hThread, const CONTEXT* lpContext);
     DWORD ResumeThread(HANDLE hThread);
     HANDLE CreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE  lpStartAddress, __drv_aliasesMem LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
-
+    HMODULE LoadLibraryA(LPCSTR lpLibFileName);
+    HANDLE CreateRemoteThread(HANDLE hProcess, LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
 
 private:
 	HMODULE hKernel32 = nullptr;
@@ -35,6 +36,8 @@ private:
     using pSetThreadContext         = BOOL(WINAPI*)(HANDLE, const CONTEXT*);
     using pResumeThread             = DWORD(WINAPI*)(HANDLE);
     using pCreateThread             = HANDLE(WINAPI*)(LPSECURITY_ATTRIBUTES, SIZE_T, LPTHREAD_START_ROUTINE, LPVOID, DWORD, LPDWORD);
+    using pLoadLibraryA             = HMODULE(WINAPI*)(LPCSTR);
+    using pCreateRemoteThread       = HANDLE(WINAPI*)(HANDLE, LPSECURITY_ATTRIBUTES, SIZE_T, LPTHREAD_START_ROUTINE, LPVOID, DWORD, LPDWORD);
 
 
     pCreateProcessA CreateProcessA_             = nullptr;
@@ -46,7 +49,8 @@ private:
     pSetThreadContext SetThreadContext_         = nullptr;
     pResumeThread ResumeThread_                 = nullptr;
     pCreateThread CreateThread_                 = nullptr;
+    pLoadLibraryA LoadLibraryA_                 = nullptr; 
+    pCreateRemoteThread CreateRemoteThread_     = nullptr; 
 
     void _LoadFunctions();
-    
 };

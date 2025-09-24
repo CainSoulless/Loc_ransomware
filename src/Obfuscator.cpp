@@ -1,13 +1,13 @@
-#include "Obfuscator.h"
+﻿#include "Obfuscator.h"
+//#include "pch.h"
 
-std::string Obfuscator::DecryptCaesar(std::vector<unsigned char>& data, int key) {
-	for (size_t i = 0; i < data.size(); i++) {
-		data[i] = static_cast<unsigned char>((data[i] + (0x100 - key)) % 0x100);
-	}
+std::string Obfuscator::decryptCaesar(const std::vector<unsigned char>& data, int key) {
+    std::vector<unsigned char> decrypted(data);
 
-	std::string str(data.begin(), data.end());
-	str.push_back('\0');
+    for (size_t i = 0; i < decrypted.size(); ++i) {
+        decrypted[i] = static_cast<unsigned char>((decrypted[i] + (0x100 - key)) % 0x100);
+    }
 
-	return str;
+    return std::string(decrypted.begin(), decrypted.end());
 }
 
