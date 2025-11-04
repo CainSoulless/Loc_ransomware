@@ -1,20 +1,16 @@
-// Loc.cpp : This file contains the 'main' function. Program execution begins and ends there.
+﻿// Loc.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #define TEST_MODE 1
 
 #if TEST_MODE == 1
-#include "tests/test.cpp"
+#include "tests/test.h"
 #endif
 
 int main(void) {
+	//ShowWindow(GetConsoleWindow(), SW_HIDE);
+
     #if TEST_MODE == 1 
-    /*
-        Evasion evasion;
-        if (evasion.mustBeAvoided) {
-            return 0xdeadbeef;
-        }
-    */
         start_testing();
         exit(0);
     #endif
@@ -36,8 +32,9 @@ int main(void) {
 
     /*
     Crypt crypt;
-    crypt.startCrypt();
+    crypt.StartCrypt();
 
     */
     return EXIT_SUCCESS;
 }
+

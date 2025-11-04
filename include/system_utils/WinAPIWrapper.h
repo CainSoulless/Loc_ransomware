@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <iostream>
 #include <vector>
+#include "Logger.h"
 
 #define STATUS_UNSUCCESSFUL ((NTSTATUS)0xC0000001)
 
@@ -12,6 +13,7 @@ public:
 	~WinAPIWrapper();
 
     BOOL CreateProcessA(LPCSTR lpApplicationName, LPSTR lpCommandLine, LPSECURITY_ATTRIBUTES lpProcessAttributes, LPSECURITY_ATTRIBUTES lpThreadAttributes, BOOL bInheritHandles, DWORD dwCreationFlags, LPVOID lpEnvironment, LPCSTR lpCurrentDirectory, LPSTARTUPINFOA lpStartupInfo, LPPROCESS_INFORMATION lpProcessInformation);
+    BOOL CreateProcessW(LPCWSTR lpApplicationName, LPWSTR lpCommandLine, LPSECURITY_ATTRIBUTES lpProcessAttributes, LPSECURITY_ATTRIBUTES lpThreadAttributes, BOOL bInheritHandles, DWORD dwCreationFlags, LPVOID lpEnvironment, LPCWSTR lpCurrentDirectory, LPSTARTUPINFOW lpStartupInfo, LPPROCESS_INFORMATION lpProcessInformation);
     LPVOID VirtualAllocEx(HANDLE hProcess, LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect);
     BOOL WriteProcessMemory(HANDLE hProcess, LPVOID lpBaseAddress, LPCVOID lpBuffer, SIZE_T nSize, SIZE_T* lpNumberOfBytesWritten);
     NTSTATUS NtUnmapViewOfSection(HANDLE ProcessHandle, PVOID BaseAddress);
@@ -20,13 +22,19 @@ public:
     BOOL SetThreadContext(HANDLE hThread, const CONTEXT* lpContext);
     DWORD ResumeThread(HANDLE hThread);
     HANDLE CreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE  lpStartAddress, __drv_aliasesMem LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
+    HMODULE LoadLibraryA(LPCSTR lpLibFileName);
+    HMODULE LoadLibraryW(LPCWSTR lpLibFileName);
+    HANDLE CreateRemoteThread(HANDLE hProcess, LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
 
+    // Safe clean
+    BOOL TerminateProcess(HANDLE hProcess, UINT uExitCode);
 
 private:
 	HMODULE hKernel32 = nullptr;
 	HMODULE hNtdll = nullptr;
 
     using pCreateProcessA           = BOOL(WINAPI*)(LPCSTR, LPSTR, LPSECURITY_ATTRIBUTES, LPSECURITY_ATTRIBUTES, BOOL, DWORD, LPVOID, LPCSTR, LPSTARTUPINFOA, LPPROCESS_INFORMATION);
+    using pCreateProcessW           = BOOL(WINAPI*)(LPCWSTR, LPWSTR, LPSECURITY_ATTRIBUTES, LPSECURITY_ATTRIBUTES, BOOL, DWORD, LPVOID, LPCWSTR, LPSTARTUPINFOW, LPPROCESS_INFORMATION);
     using pVirtualAllocEx           = LPVOID(WINAPI*)(HANDLE, LPVOID, SIZE_T, DWORD, DWORD);
     using pWriteProcessMemory       = BOOL(WINAPI*)(HANDLE, LPVOID, LPCVOID, SIZE_T, SIZE_T*);
     using pNtUnmapViewOfSection     = NTSTATUS(NTAPI*)(HANDLE, PVOID);
@@ -35,9 +43,14 @@ private:
     using pSetThreadContext         = BOOL(WINAPI*)(HANDLE, const CONTEXT*);
     using pResumeThread             = DWORD(WINAPI*)(HANDLE);
     using pCreateThread             = HANDLE(WINAPI*)(LPSECURITY_ATTRIBUTES, SIZE_T, LPTHREAD_START_ROUTINE, LPVOID, DWORD, LPDWORD);
+    using pLoadLibraryA             = HMODULE(WINAPI*)(LPCSTR);
+    using pLoadLibraryW             = HMODULE(WINAPI*)(LPCWSTR);
+    using pCreateRemoteThread       = HANDLE(WINAPI*)(HANDLE, LPSECURITY_ATTRIBUTES, SIZE_T, LPTHREAD_START_ROUTINE, LPVOID, DWORD, LPDWORD);
+    using pTerminateProcess         = BOOL(WINAPI*)(HANDLE, UINT);
 
 
     pCreateProcessA CreateProcessA_             = nullptr;
+    pCreateProcessW CreateProcessW_             = nullptr;
     pVirtualAllocEx VirtualAllocEx_             = nullptr;
     pWriteProcessMemory WriteProcessMemory_     = nullptr;
     pNtUnmapViewOfSection NtUnmapViewOfSection_ = nullptr;
@@ -46,7 +59,10 @@ private:
     pSetThreadContext SetThreadContext_         = nullptr;
     pResumeThread ResumeThread_                 = nullptr;
     pCreateThread CreateThread_                 = nullptr;
+    pLoadLibraryA LoadLibraryA_                 = nullptr; 
+    pLoadLibraryW LoadLibraryW_                 = nullptr; 
+    pCreateRemoteThread CreateRemoteThread_     = nullptr; 
+    pTerminateProcess TerminateProcess_         = nullptr; 
 
     void _LoadFunctions();
-    
 };

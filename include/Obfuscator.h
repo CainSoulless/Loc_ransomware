@@ -4,5 +4,5 @@
 
 class Obfuscator {
 public:
-	static std::string DecryptCaesar(std::vector<unsigned char>& data, int key);
+	static std::string decryptCaesar(const std::vector<unsigned char>& data, int key);
 };

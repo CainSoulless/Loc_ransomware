@@ -1,54 +1,56 @@
-# Loc Ransomware 🛡️
+# 🛠️ Loc Ransomware
 
-**Loc Ransomware** es un proyecto educativo que implementa técnicas avanzadas de evasión, incluyendo **Process Hollowing** para inyectar código malicioso en procesos legítimos del sistema. Este proyecto está diseñado para ilustrar cómo operan algunos ransomware en el mundo real, permitiendo la investigación y la mejora de las capacidades de detección de malware.
+**Loc** es un proyecto Ransomware de investigación orientado al estudio y práctica de técnicas de *code injection*, *remote thread execution*, *memory manipulation*, y evasión de análisis. Está escrito en C++, con algo de MASM (Microsoft Macro Assembler) y se estructura modularmente para separar cada fase de ejecución.
+
+Este repositorio fue creado con fines de **researching** en seguridad ofensiva, específicamente en el análisis de comportamiento, evasión y técnicas post-explotación.
+
+---
+
+## 🚨 Características principales
+
+- Inyección por **Remote Thread DLL Injection**
+- Inyección directa de **shellcode en memoria**
+- **Cifrado de archivos** usando XOR y cambio de extensión
+- Técnicas de evasión de análisis y sandboxing
+- **Persistencia** en el sistema vía Registry Keys
+- Modularidad: cada técnica implementada como clase reutilizable
+
+---
+
+## 🔸 Evasión / Antianálisis y Persistencia
+
+- **Dynamic API Resolution + Caesar Cipher Obfuscation**
+  - Los nombres de funciones (`LoadLibraryA`, `GetProcAddress`, etc.) y DLLs (`kernel32.dll`, `ntdll.dll`) están cifrados mediante **Caesar cipher**.
+  - Se desencriptan en tiempo de ejecución, dificultando el análisis estático y evitando detección por firmas simples.
+
+- **Detección de máquinas virtuales / sandboxes**
+  - Búsqueda de indicadores de entornos virtualizados: strings como `VBox`, `VMware`, `QEMU`, entre otros.
+  - Evaluación de recursos del sistema (número de núcleos, memoria, etc.) para identificar entornos artificialmente limitados.
+
+- **Detección de depuradores (anti-debug)**
+  - Uso de funciones como `IsDebuggerPresent`, `CheckRemoteDebuggerPresent`.
+  - Inspección del campo `BeingDebugged` del `PEB`.
+  - Técnicas pasivas como errores controlados para observar reacciones anómalas del entorno.
+
+- **Manipulación del flujo de ejecución**
+  - El ejecutable puede autocrashearse o desviar su comportamiento si se detecta un entorno de análisis dinámico o sandbox.
+  - Esto dificulta la ejecución completa en entornos automatizados.
+
+- **Persistencia en el sistema**
+  - Se crean claves de registro (`HKCU\Software\Microsoft\Windows\CurrentVersion\Run`) para persistencia tras reinicio del sistema.
+  - El ejecutable se ejecuta nuevamente al iniciar sesión.
+
+---
+
+## 🧩 Posibles técnicas futuras
+
+- **Timing-based sandbox detection**
+- **Cash-as-Demand**
+- **Comunicación a C2**
+- **API unhooking desde ntdll.dll limpia** (Mi técnica favorita️❤️)
+
+---
 
 ## ⚠️ Disclaimer
-Este proyecto es únicamente con fines educativos y de investigación. El uso indebido de este código está prohibido y podría resultar en consecuencias legales. No se recomienda utilizar este código en sistemas de producción o sin autorización.
 
-## 🚀 Características
-- **Process Hollowing**: Inyecta un shellcode en un proceso legítimo (`svchost.exe`, `notepad.exe`, etc.) para ejecutarlo bajo la apariencia de un proceso confiable.
-- **Shellcode Injection**: Utiliza técnicas avanzadas para escribir y ejecutar código arbitrario en un proceso suspendido.
-- **Técnicas de Evasión**: Implementación de técnicas básicas de evasión, como la detección de máquinas virtuales y sandboxes.
-
-## 📂 Estructura del Proyecto
-
-```bash
-Loc_ransomware/
-│
-├── src/
-│   ├── Loc.cpp                 # Punto de entrada principal del proyecto
-│   ├── Evasion.cpp             # Implementación de técnicas de evasión
-│   ├── ProcessHollowing.cpp    # Lógica de Process Hollowing
-│   ├── Injection.cpp           # Manejador del shellcode
-│   └── ...
-│
-├── include/
-│   ├── Evasion.h               # Definiciones de la clase Evasion
-│   ├── ProcessHollowing.h      # Definiciones de la clase ProcessHollowing
-│   └── Injection.h             # Definiciones para la inyección de shellcode
-│
-└── README.md                   # Descripción del proyecto (este archivo)
-```
-## 🛠️ Instalación y Uso
-
-### Requisitos Previos
-
-*   **Sistema Operativo**: Windows (Requiere permisos de administrador)
-*   **Compilador**: Microsoft Visual Studio o cualquier entorno con soporte para C++
-*   **Herramientas de Depuración**: [Process Hacker](https://processhacker.sourceforge.io/), [ProcMon](https://docs.microsoft.com/en-us/sysinternals/downloads/procmon) para inspeccionar el proceso y la memoria.
-
-### Instrucciones
-
-1.  **Clona el repositorio**:
-    
-    ```bash
-    git clone https://github.com/CainSoulless/Loc_ransomware.git
-    ```
-    
-2.  **Compila el proyecto** en tu entorno preferido (Visual Studio recomendado).
-
-3.  **Ejecución**:
-   Ejecuta el binario generado (`Loc.exe`). Por defecto, el código por defecto ejecuta `test.cpp`, por lo que se requiere reemplazar el valor del macro TEST_MODE a 0 para salir del modo de pruebas.
-
-4.  **Monitoreo**:
-   Utiliza herramientas como **Process Hacker** para verificar la inyección de código en el proceso objetivo.
+Este repositorio es únicamente con fines de **investigación profesional** en ciberseguridad. El uso indebido de este código fuera de entornos controlados y éticos **está completamente prohibido**.
